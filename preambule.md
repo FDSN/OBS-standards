@@ -4,9 +4,14 @@ earth’s surface that is covered by water.
 For full usage, they should be archived in and distributed from FDSN
 compatible seismological databases.
 
-standards.md lists OBS-specific standards and “best practices” for using
+`standards.md` lists OBS-specific standards and “best practices” for using
 the stationXML and miniSEED formats to make OBS data clear,
-easy to use and intercompatible.
+easy to use and intercompatible.  It should be the reference for all standards.
+
+`user.md` is a stab at a user guide.  All standards information therein derives
+from `standards.md` and if there is an inconsistency it is `standards.md` that should be
+referenced (so maybe remove this part?).  This document is the reference for
+marine seismology-specific processing software. (Should I just make a `software.md` document?)
 
 OBS clocks generally have a non-negligible drift because of the lack of GPS
 signal at the seafloor.
