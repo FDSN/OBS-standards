@@ -12,3 +12,5 @@ Current structure is
 - one document on standards
 - a second document on useful, publically available software tools
 - A "References" directory holding old standards documents
+
+The first two documents are initally based on the information in the "References" directory
