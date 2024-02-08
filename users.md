@@ -3,7 +3,7 @@
 ## Preamble
 Ocean bottom seismometers (OBS) provide seismological access to the 70% of the earth’s surface that is covered by water. This document provides information about specificities of ocean bottom seismometer data that users may need to take into account in order to correctly use the data and fully exploit the signals.
 
-The [Metadata](Metatdata) and [Data](Data) sections are derived from the `standards.md` document, which is the reference.
+The [Metadata](./users.md#metadata) and [Data](./users.md#data) sections are derived from the `standards.md` document, which is the reference.
 
 ## Metadata
 
