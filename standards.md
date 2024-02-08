@@ -25,6 +25,7 @@ The following source-subsource codes (see FDSN Source Identifiers documentation)
 should be used for the following types of sensor/data:
 
 code | description
+---- | ------------------------------------------------------------
 1    | Unoriented seismometer, “N” channel equivalent
 2    | Unoriented seismometer “E” channel (+90 degrees from "1")
 3    | Seismometer/geophone with inverted vertical channel (positive voltage is down)
