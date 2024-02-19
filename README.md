@@ -8,7 +8,9 @@ The goals are to:
 - Help users to understand and use marine seismology data
 - include standards in new “Guidelines for specific datasets” within the StationXML and miniSEED documentation
 
-Current structure is
+We want to have a document ready for validation/vote before the next FDSN meeting (September 2025 Lisbon)
+
+The current structure is
 - one document on standards
 - a second document on useful, publically available software tools
 - A "References" directory holding old standards documents
