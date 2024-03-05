@@ -37,7 +37,7 @@ If OBSs are deployed repeatedly at one site (to make a long series), they often 
 
 
 ## OBS-specific Software
-There are several publically available software modules that can be useful for confirming or correcting data and metadata. If you find better clock drift or sensor
+There are several publically available software modules that can be useful for confirming or correcting data and metadata. If you calculate better clock drift or sensor
 orientation values than those provided in the data center,  inform the data center of the new values and the method you used to calculate them.
 
 ### Descriptions
