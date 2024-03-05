@@ -69,5 +69,6 @@ Sensor orientation |            | John Scholz's code
 Noise removal      |   ATACR    | matlab version
 "                  |   ATACR    | python version
 "                  |  tiskitpy  |
+BRUIT-FM Toolbox   | https://gitlab.ifremer.fr/anr-bruitfm/bruit-fm-toolbox | Improved windowing selection and data stacking for more accurate transfer function calculation
 Station localization | obsloc?  |
 Active seismic data  |          |
