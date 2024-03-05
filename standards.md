@@ -7,11 +7,11 @@ The StationXML format (v1.2) has no intrinsic elements for storing OBS-specific
 information.  This information should be stored in a structured metadata file
 with a public-published format.
 
-We propose to use obsinfo "subnetwork" files,
+We propose to use obsinfo ["subnetwork" files](https://gitlab.com/resif/smm/obsinfo/-/blob/master/src/obsinfo/_examples/Information_Files/subnetworks/BBOBS.INSU-IPGP.subnetwork.yaml),
 which allow the storage of essential information about deployments without
 going into instrument-level details.
 
-These files can be used with obsinfo instrumentation files to generate StationXML
+These files can be used with obsinfo instrumentation files to generate [FDSN StationXML](http://docs.fdsn.org/projects/stationxml/en/latest/index.html)
 files with embedded OBS-specific information, or they can be used to fill in information
 in StationXML files generated using other tools.
 
@@ -21,7 +21,7 @@ should be recorded in text-based, structured files.
 The JSON process-steps format (LINK) is an example.
 
 ## Source Identifiers
-The following source-subsource codes (see FDSN Source Identifiers documentation)
+The following source-subsource codes (see [FDSN Source Identifiers documentation](http://docs.fdsn.org/projects/source-identifiers/en/v1.0/index.html))
 should be used for the following types of sensor/data:
 
 code | description
@@ -58,7 +58,7 @@ If you must use relative times, use (and name) `instrument_correction` in second
 (this is the same "polarity" as the “Instrument Correction” record header field in miniSEED 2.4 and the FDSN -> Time -> Correction header in miniSEED 3).
 
 ### Deployments in lakes
-Set the <WaterLevel> to the elevation of the lake surface
+Set the `<WaterLevel>` to the elevation of the lake surface
 
 ### Positions
 Use the `plusError`, `minusError` and `measurementUncertainty` attributes to specify uncertainties in Latitude, Longitude and Elevation and how you measured them.
