@@ -13,6 +13,7 @@ We want to have a document or documents ready for validation/vote before the nex
 The current structure is
 - one document on standards
 - a second document on useful, publically available software tools
+- a third `preambule.md` document that holds motivation information (was in original documents, not ready to throw it out yet)
 - A "References" directory holding old standards documents
 
 The first two documents are initally based on the information in the "References" directory
