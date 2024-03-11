@@ -3,37 +3,19 @@
 ## Preamble
 Ocean bottom seismometers (OBS) provide seismological access to the 70% of the earth’s surface that is covered by water. This document provides information about specificities of ocean bottom seismometer data that users may need to take into account in order to correctly use the data and fully exploit the signals.
 
-The [Metadata](./users.md#metadata) and [Data](./users.md#data) sections are derived from the `standards.md` document, which is the reference.
+The [Metadata and Data](./users.md#metadata-and-data) section contains subsection titles whose content would be derived from the [standards](./standards.md) document.
 
-## Metadata
+## Metadata and Data
 
-### Azimuth
-Mobile marine seismology horizontal channels are often not oriented on recovery, in which case the horizontal channel names are ‘??1’ and ‘??2’ instead of ‘??N’ and ‘??E’. The ‘??1’ channel is oriented -90° with respect to the ‘??2’ channel. If the channels have been oriented, the metadata will provide the azimuths, uncertainty and measurement method. If not, they will often indicate ‘??1’s azimuth as 0+-180° and ‘??2’s azimuth as 90+-180°.
-
-### Dip
-Pressure sensor channel dips are given such that the the first (upgoing) P arrival will have the same polarity as that on a vertical seismometer channel.
-
-### Clock corrections
-The clock drift and method used to measure it are usually stored as a JSON-formatted station-level comment
-
-### Leap seconds
-Mobile marine seismology dataloggers do not automatically integrate leap seconds. If a leap-second has been corrected in the data, there should be a JSON-formatted station-level comment specifying the leapsecond
-
-
-## Data
-
-### Data quality flags
-Mobile marine seismology data usually have a significant clock drift: up to several seconds per year. A data quality of “D” indicates that the data has not been corrected for the clock drift. A data quality of “Q” indicates that it has. Some data centers store both, in which case a standard FDSN webservices request will return the “Q” data quality, if it is available. Researchers interested in low-frequency, multi-day signals and not concerned with second-level timing may prefer to request the “D” quality, which is easier for some software to stitch together for multi-day spectral analysis.
-
-### Pressure sensor data
-Most Mobile marine seismology data have at least one pressure sensor channel. The most common pressure sensors are hydrophones (channel code “?DH”), differential pressure gauges (channel code “?DG” in theory, but often saved as “?DH”) and depth sensors (channel code “?DO” in theory, but often saved as “?DH”). The former have a low frequency limit from ~1 second to 100 seconds and effectively no high frequency limit, whereas the last two are more sensitive at low frequencies and usually have a clear high frequency limit. Hydrophone data can act as a proxy for vertical channel data and often have clearer P phase arrivals. Differential and absolulte pressure gauges are useful for measuring the coherent signal between low-frequency ocean waves and seafloor motion, which can then be either exploited for subsurface studies, or removed for clearer earthquake and normal mode signals.
-and significant clock drift: up to several seconds per year. A data quality of “D” indicates that the data has not been corrected for the clock drift. A data quality of “Q” indicates that it has. Some data centers store both, in which case a standard FDSN webservices request will return the “Q” data quality, if it is available. Researchers interested in low-frequency, multi-day signals and not concerned with second-level timing may prefer to request the “D” quality, which is easier for some software to stitch together for multi-day spectral analysis.
-
-
-## Both metadata and data
-
-### Station names for repeated deployments
-If OBSs are deployed repeatedly at one site (to make a long series), they often an incrementing alphanumeric character at the end of the station name (i.e., A01A, then A01B then A01C for subsequent deployments at the same approximate site “A01”).
+- Station names for repeated deployments
+- Metadata
+  - Azimuth
+  - Dip
+  - Clock corrections
+  - Leap seconds
+- Data
+  - Data quality flags
+  - Pressure sensor data
 
 
 ## OBS-specific Software
