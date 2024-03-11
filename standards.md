@@ -78,16 +78,16 @@ Indicate in a `<Comment>`, using JSON syntax.  The example below was generated u
 ### Orientation information
 Set the following `<Azimuth>` and `<Dip>` values for the following source/subsource codes:
 
-code       | `<Dip unit="DEGREES>xxx</Dip>`[^2] | `<Azimuth unit="DEGREES" xxx>` | `yyy</Azimuth>`   | Comment
+code       | `<Dip unit="DEGREES>xxx</Dip>`[^1] | `<Azimuth unit="DEGREES" xxx>` | `yyy</Azimuth>`   | Comment
 ---------- | ------------------------------ | ----------------------------- | ---------------- | ---------------------------
 1          | 0.0                     | minusError="180.0" plusError="180.0" | 0.0  |
 2          | 0.0                     | minusError="180.0" plusError="180.0" | 90.0 |
 3          | 90.0                    |                                      | 0.0  |
-DH, DG, DO | 90.0                    |                                      | 0.0  | if value *DECREASES* for a pressure increase[^1]
-DH, DG, DO | -90.0                   |                                      | 0.0  | if value *INCREASES* for a pressure increase[^1]
+DH, DG, DO | 90.0                    |                                      | 0.0  | if value *DECREASES* for a pressure increase[^2]
+DH, DG, DO | -90.0                   |                                      | 0.0  | if value *INCREASES* for a pressure increase[^2]
 
-[^1]: The pressure sensor dip gives the same polarity as the seismometer/geophone for UPGOING waves
-[^2]: StationXML/Seed Dip is degrees down from horizontal.  SAC analog is +90 degrees ([`CMPINC` : Component incident angle (degrees from upward vertical)](https://ds.iris.edu/files/sac-manual/manual/file_format.html)
+[^1]: StationXML/Seed Dip is degrees down from horizontal.  SAC analog is +90 degrees ([`CMPINC` : Component incident angle (degrees from upward vertical)](https://ds.iris.edu/files/sac-manual/manual/file_format.html)
+[^2]: The pressure sensor dip gives the same polarity as the seismometer/geophone for UPGOING waves
 
 ### Data completeness
 Use Station <CreationDate> and <TerminationDate> fields to specify when the data was supposed to start and end, and <StartDate> and <EndDate> to specify when it actually starts and ends.
