@@ -1,0 +1,35 @@
+# OBS standards Action Group meeting 2024-05-14
+
+Present: John Collins, Yinshuang Ai, Jerry Carter, Susanne Hemmleb, Kasey Aderhold, Wayne Crawford
+
+## Notable decisions
+
+
+## Discussion
+> **SHemmleb**: At our group meeting, Angelo didn't like the word "standards", would prefer "guidelines", which he considers stronger.
+>
+> **Wayne**: I think "standards" is stronger than "guidelines", will look it up (start an issue)
+>
+> **JSimon**: Agree. Opening issues is probably better than pull requests.
+>
+> **JCollins**: Just need some time to look over the document
+>
+> **KAderhold**: Could be a problem keeping `standards.md` and `users.md` parallel as changes are made.
+>
+> **WCrawford**: Created issue to remove data and metadata details from `users.md` document, keeping only list of sections to put in.  This document will be principally used for updating the software information (*could also just create a `software.md` file*)
+
+
+Checked that everyone gets informed when there is an issue.  Each member needs to:
+- login to github
+- click on the "Watch" button at the top level directory
+- select "All Activity"
+
+> **KAderhold**: Are there milestones for reporting to the community?
+
+**Decision**: present at AGU 2024, EGU 2025; send june/december update mails to FDSN community.  At conferences: poster with opportunity for conversation.  Also regional conferences as members wish (inform the group please).
+
+> **JCarter**: Thu and Fri before EGU, has a meeting with ORFEUS to talk about FDSN standards, could be a good place to bring this work up.
+
+## Meeting frequency
+
+Every two months seems reasonable to the members.
