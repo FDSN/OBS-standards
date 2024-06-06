@@ -14,7 +14,7 @@ Japan            | +9                | No change                | 7-8         | 
 
 Slots starting before 7h or ending after 24h local are marked in **bold**.
 
-**SUFFER HOURS** are people times the number of hours beyond these limits
+**SUFFER HOURS** are person-hours beyond these limits
 
 Two-hour time slots for 31 March to 27 October are
 
