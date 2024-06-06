@@ -25,7 +25,7 @@ Western European | +1     |    15-17h    |   16-18h   | **23-01h**
 Central European | +2     |    16-18h    |   17-19h   | **00-02h**
 China            | +8     |    22-00h    | **23-01h** | **06-08h**
 Japan            | +9     |  **23-01h**  | **00-02h** |   07-09h
-**SUFFERERS**    |        |    **1**     |    **2**   |   **4**
+**SUFFER HOURS** |        |    **1**     |    **3**   |   **6**
 
 Two-hour time slots for 3 November to 10 March are
 
@@ -38,4 +38,4 @@ Western European |  0     |    14-16h    |   15-17h   |   22-00h
 Central European | +1     |    15-17h    |   16-18h   | **23-01h**
 China            | +8     |    22-00h    | **23-01h** | **06-08h**
 Japan            | +9     |  **23-01h**  | **00-02h** |   07-09h
-**SUFFERERS**    |        |    **3**     |    **2**   |   **3**
+**SUFFER HOURS** |        |    **3**     |    **3**   |   **3**
