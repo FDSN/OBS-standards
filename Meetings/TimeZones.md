@@ -8,6 +8,7 @@ US Eastern       | -5 until 10 Mar   | -4 from 10 Mar to 3 Nov  | 5           | 
 Western European |  0 until 31 Mar   | +1 from 31 Mar to 27 Oct | 1           | Corela
 Central European | +1 until 31 Mar   | +2 from 31 Mar to 27 Oct | 7-6         | Crawford, Hemmleb
 China            | +8                | No change                | 8-9         | Yinshuang Ai     
+Japan            | +9                | No change                | 7-8         | Takehi ISSE     
 
 Two-hour time slots for 31 March to 27 October are
 
@@ -16,6 +17,7 @@ Time Zone  / GMT | offset | 14-16h   | 15-17h | 23-01h
 US Pacific       | -7     |   7-9h   |  8-10h | 16-18h
 US Mountain      | -6     |   8-10h  |  9-11h | 17-19h
 US Eastern       | -4     |  10-12h  | 11-13h | 19-21h
-Western European | +1     |  15-17h  | 16-18h | 00-02h
-Central European | +2     |  16-18h  | 17-19h | 01-03h
-China            | +8     |  22-00h  | 23-01h | 07-09h
+Western European | +1     |  15-17h  | 16-18h | **00-02h**
+Central European | +2     |  16-18h  | 17-19h | **01-03h**
+China            | +8     |  22-00h  | **23-01h** | 07-09h
+Japan            | +9     |  **23-01h**  | **00-02h** | 08-10h
