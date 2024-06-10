@@ -44,18 +44,44 @@ This may be a *de facto* "standard", but I haven't seen it written down
 See StationXML Reference for details of StationXML elements 
 
 ### Clock drift
-Indicate in a `<Comment>` (or in a separate namespace?)
-If indicated in a `<Comment>`, use JSON syntax to separate fields, the example below was generated using the obsinfo subnetwork nomenclature:
+
+Should be specified using absolute datetimes, to avoid ambiguity.  Possible structures are:
+
+```yaml
+time_base: 'Seascan MCXO, 1e-8 nominal drift'
+reference: 'GPS'
+start_sync_reference: '2015-04-22T09:21:00Z'
+start_sync_instrument: '2015-04-22T09:21:00Z'
+end_sync_reference: '2016-05-28T22:59:00.1843Z'
+end_sync_instrument: '2016-05-28T22:59:02Z'
+```
+
+the `time_base` and `reference` fields are optional.
+
+or, for more flexibility :
+
+```yaml
+interpolation: 'linear'  # 'linear' or 'cubic'
+syncs_reference:
+    - '2015-04-22T09:21:00Z'
+    - '2016-05-28T22:59:00.1843Z'
+syncs_instrument:
+    - '2015-04-22T09:21:00Z'
+    - '2016-05-28T22:59:02Z'
+```
+
+This is embedded in the StationXML file as a JSON-coded string in a `<Comment>` field
+In the future, a seperate namespace may be created to allow a more specific and structured representation
+
+Below is an example of the first proposition in a `<Comment>` field:
 
 ```xml
 <Comment subject=”Clock Drift”>
-<Value>“{Linear Clock Correction: {time_base: Seascan MCXO, ~1e-8 nominal
+<Value>“{Linear Clock Correction: {time_base: Seascan MCXO, 1e-8 nominal
 drift, reference: GPS, start_sync_reference: 2015-04- 22T09:21:00Z,start_sync_instrument: 0, end_sync_reference: 2016-05- 28T22:59:00.1843Z,end_sync_instrument: 2016-05-28T22:59:02Z}}”</Value> </Comment>
 ```
 
-Use absolute datetimes when possible.
-If you must use relative times, use (and name) `instrument_correction` in seconds to add to instrument time at a given reference time
-(this is the same "polarity" as the “Instrument Correction” record header field in miniSEED 2.4 and the FDSN -> Time -> Correction header in miniSEED 3).
+If there is assumed to be clock drift but some or all of values were not measure, each missing value should be represented by 'None'
 
 ### Deployments in lakes
 Set the `<WaterLevel>` to the elevation of the lake surface
