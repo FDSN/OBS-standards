@@ -113,7 +113,7 @@ DH, DG, DO | 90.0                    |                                      | 0.
 DH, DG, DO | -90.0                   |                                      | 0.0  | if value *INCREASES* for a pressure increase[^2]
 
 [^1]: StationXML/Seed Dip is degrees down from horizontal.  SAC analog is +90 degrees ([`CMPINC` : Component incident angle (degrees from upward vertical)](https://ds.iris.edu/files/sac-manual/manual/file_format.html)
-[^2]: The pressure sensor dip gives the same polarity as the seismometer/geophone for UPGOING waves
+[^2]: The pressure sensor dip gives the same polarity as the seismometer/geophone for UPGOING waves.  Dip = -90 means that the first break will have the same polarity as a "Z" channel
 
 ### Data completeness
 **[REC {/}]** Use Station <CreationDate> and <TerminationDate> fields to specify when the data was supposed to start and end, and <StartDate> and <EndDate> to specify when it actually starts and ends.
