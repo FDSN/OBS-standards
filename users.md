@@ -24,6 +24,10 @@ orientation values than those provided in the data center,  inform the data cent
 
 ### Descriptions
 
+#### Creating metadata
+
+[obsinfo](https://obsinfo.readthedocs.io) is a tool for creating StationXML files that include OBS-specific information
+
 #### Clock drift confirmation
 The instrument clock drift (relative to a reference instrument) can be calculated using noise correlation (REF_SITE) or using the observed drift in hypocenter traveltime residuals.
 
