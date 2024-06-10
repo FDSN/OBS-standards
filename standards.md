@@ -116,7 +116,7 @@ DH, DG, DO | -90.0                   |                                      | 0.
 [^2]: The pressure sensor dip gives the same polarity as the seismometer/geophone for UPGOING waves.  Dip = -90 means that the first break will have the same polarity as a "Z" channel
 
 ### Data completeness
-**[REC {/}]** Use Station <CreationDate> and <TerminationDate> fields to specify when the data was supposed to start and end, and <StartDate> and <EndDate> to specify when it actually starts and ends.
+**[REC {/}]** Use Station ``<StartDate>`` and ``<EndDate>`` to specify when the data was supposed to start and end, and Channel ``<StartDate>`` and ``<EndDate>`` to specify when it actually starts and ends for each channel.
 
 ### Standard values that marine seismologists may not know:
 **[FDSN]** Within each `<Channel>`, set `<Type>CONTINUOUS</Type>` and `<Type>GEOPHYSICAL</Type>`
