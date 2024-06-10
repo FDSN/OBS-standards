@@ -127,31 +127,42 @@ DH, DG, DO | -90.0                   |                                      | 0.
 ### Clock drift correction
 
 Three main possibilities for distributing data are proposed:
-1. Indicate the time correction in each record header but do not apply it (RAW).
-2. **[HIGHLY RECOMMENDED {/}]** Indicate the time correction in each record header and apply it (SHIFTED).
-3. Resample the data at the originally intended rate (RESAMPLED)
+1. *"RAW"*: No time correction applied.
+    - May be preferred by users of long-period data (>10s) because it can be easier to concatenate daily files.
+3. **[HIGHLY RECOMMENDED {/}]** *"SHIFTED"*: Indicate the time correction in each record header and apply it.
+    - Allows the user to work with time-corrected but otherwise unmodified data
+5. *"RESAMPLED"*: Resample the data at the originally intended rate.
+    - "Best of both worlds": data are time-corrected and easy to concatenate/combine with other data
+    - Could distort waveforms/spectra (needs to be studied)
 
-The SHIFTED method allows the user to work with time-corrected data which has not been modified but for which the time is as close as possible to GPS time. Users of very long-period data often prefer RAW data because it is easier to concatenate daily files. RESAMPLED data offers the best of both worlds, but could distort waveforms/spectra (only if not correctly performed?).
-Until consensus is reached, we propose below how to distinguish between these methods.
+#### Distinguishing data of each type
 
-#### If the time correction has been calculated:
-- **[REC {/}]** RESAMPLED data: Use a non-standard Instrument Code, as the data themselves have been modified.
-- SHIFTED data:
+- *SHIFTED**
+    - **[RECOMMENDED {/}]** data quality flag "Q"
+    - **[ALTERNATIVE {/}]** location code between 00 and 49
+    - **[ALTERNATIVE {/}]** letter in location code?
+- *RAW*
+    - **[RECOMMENDED {/}]** data quality flag "D"
+    - **[ALTERNATIVE {/}]** location code between 50 and 99
+    - **[ALTERNATIVE {/}]** letter in location code?
+- *RESAMPLED*
+    - Different channel code (to be specified)
+
+#### Creating data of each type
+
+- *RAW*
+    - Nothing to do.
+    - [RECOMMENDED? {/}] Put time correction in record header field 16 and set field 12 bit 1 to 0.
+- *SHIFTED**
     - **[REC {/}]** Calculate a new time drift for each record
     - **[STD {/}]** Indicate time correction applied in record header field 16 (“Time
       Correction” and set field 12, bit 1 (“Activity flag, time correction applied”) to 1.
-    - Indicate that the time correction code has been applied by:
-        - **[REC {/}]** Setting the data quality flag to “Q”
-        - **[REC {/}]** Alternatively, specify a location code between 00 and 49
-- RAW data.
-    - **[REC {/}]** Indicate time correction applied in record header field 16, without applying it. The ‘qedit’ software can do this using its “add_trend corr” command.
-    - Indicate that there is no time correction by:
-        - **[REC {/}]** Setting the data quality flag to “D
-        - **[REC {/}]** Alternatively, specify a location code between 50 and 99
+    - If there is no measure of clock drift:
+       - Provide data as "D". set bit 7 of data quality flag ("time tag is questionable") to 1.  Add blockette 500, field 10 ("Clock status") indicating that there is an unmeasured drift (for example: "Unmeasured clock drift on Seascan MCXO, expected order = 1e-8")
+- *RESAMPLED*
+    - Not yet determined
 
-#### If the time correction has not been calculated
-**[REC {/}]** Set bit 7 of the data quality flag (“time tag is questionable”) to 1. 4
-**[REC {/}]** *?If possible, add blockette 500, field 10 (“Clock status”) indicating the linear drift (i.e. “Unmeasured linear drift on Seascan MCXO, expected order(1e-8)”)?*
+There is a new ``msmod`` option in discussion/development that should take care of creating *SHIFTED** data, using either a linear or cubic spline interpolation (possibility of polynomial fit?).
 
 ### Leap seconds
 **[STD {/}]** Leap seconds should be corrected in **SHIFTED** data and the record containing the leap second should be flagged.
