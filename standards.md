@@ -128,7 +128,7 @@ DH, DG, DO | -90.0                   |                                      | 0.
 
 Three main possibilities for distributing data are proposed:
 1. Indicate the time correction in each record header but do not apply it (RAW).
-2. Indicate the time correction in each record header and apply it (SHIFTED).
+2. **[HIGHLY RECOMMENDED {/}]** Indicate the time correction in each record header and apply it (SHIFTED).
 3. Resample the data at the originally intended rate (RESAMPLED)
 
 The SHIFTED method allows the user to work with time-corrected data which has not been modified but for which the time is as close as possible to GPS time. Users of very long-period data often prefer RAW data because it is easier to concatenate daily files. RESAMPLED data offers the best of both worlds, but could distort waveforms/spectra (only if not correctly performed?).
