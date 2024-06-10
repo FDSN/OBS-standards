@@ -7,7 +7,7 @@ The StationXML format (v1.2) has no intrinsic elements for storing OBS-specific
 information.  This information should be stored in a structured metadata file
 with a public-published format.
 
-We propose to use obsinfo ["subnetwork" files](https://gitlab.com/resif/smm/obsinfo/-/blob/master/src/obsinfo/_examples/Information_Files/subnetworks/BBOBS.INSU-IPGP.subnetwork.yaml),
+We propose to use obsinfo ["subnetwork" files](https://obsinfo.readthedocs.io/en/latest/subnetwork.html),
 which allow the storage of essential information about deployments without
 going into instrument-level details.
 
