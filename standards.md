@@ -81,25 +81,37 @@ Below is an example of the first proposition in a `<Comment>` field:
 drift, reference: GPS, start_sync_reference: 2015-04- 22T09:21:00Z,start_sync_instrument: 0, end_sync_reference: 2016-05- 28T22:59:00.1843Z,end_sync_instrument: 2016-05-28T22:59:02Z}}”</Value> </Comment>
 ```
 
-If there is assumed to be clock drift but some or all of values were not measure, each missing value should be represented by 'None'
+If there is assumed to be clock drift but some or all of values were not measured, each missing value should be represented by 'None'
+
+### Leap seconds
+
+Structure is:
+```yaml
+time: 2016-082T23:59:60Z
+type: +
+description: Positive leap-second (a 61-second minute)
+correction_data:
+    - msmod --timeshift -1 -ts 2016,182,23:59:59.999999
+    - msmod --actflags ‘4,1’ –tsc 2016,182,23:59:59.999999 –tec 2016,182,23:59:59.999999
+correction_end_sync_instrument: subtracted one second from displayed instrument time
+```
+
+only `time` and `type` are required
+
+**[REC {/}]** Embedded in a StationXML `<Comment>`.  Possible future namespace element, as for clock drift.  Below is a StationXML example
+
+```xml
+<Comment subject=”Leap Second”>
+<Value>“{time: 2016-082T23:59:60Z, type: '+', description: 'Positive leap-second (a
+61-second minute)', correction_data: ['msmod --timeshift -1 -ts 2016,182,23:59:59.999999', ' msmod –actflags ‘4,1’ –ts 2016,182,23:59:36 –te 2016,183,00:00:36'], correction_end_sync_instrument: subtracted one second from displayed instrument time"</Value>
+</Comment>
+```
 
 ### Deployments in lakes
 **[STD {/}]** Set the `<WaterLevel>` to the elevation of the lake surface
 
 ### Positions
 **[REC {/}]** Use the `plusError`, `minusError` and `measurementUncertainty` attributes to specify uncertainties in Latitude, Longitude and Elevation and how you measured them.
-
-### Leap seconds
-**[REC {/}]** Indicate in a `<Comment>`, using JSON syntax.  The example below was generated using the obsinfo subnetwork nomenclature
-
-```xml
-<Comment subject=”Leap Second”>
-<Value>“{time: 2016-082T23:59:60Z, “description: Positive leap-second (a
-61-second minute)}"</Value> </Comment>
-<Comment subject=”Leap Second”>
-<Value>“{correction_data: msmod --timeshift -1 -ts 2016,182,23:59:59.999999 –s, correction_end_sync_instrument: subtracted one second from displayed instrument time"</Value>
-</Comment>
-```
 
 ### Orientation information
 **[STD {/}]** Set the following `<Azimuth>` and `<Dip>` values for the following source/subsource codes:
@@ -170,24 +182,22 @@ There is a new ``msmod`` option in discussion/development that should take care 
 **[STD {/}]** If the leap second is positive (the most common case: 61 seconds in the minute):
 - Shift all record times AFTER the leap second back one second.
 - Set activity flag bit 4 to 1 in the header of the record containing the leap second.
-- Change ‘end_sync_instrument’ to be one second earlier than what the instrument
+- Change `end_sync_instrument` to be one second earlier than what the instrument
   indicated
+
+An example of changing the data using msmod, for a positive leap-second at 23:59:60 on day
+182, 2016:
+
+```console
+msmod --timeshift -1 -ts 2016,182,23:59:59.999999'
+msmod –-actflags ‘4,1’ –tsc 2016,182,23:59:59.999999 –tec 2016,182,23:59:59.999999
+```
 
 **[STD {/}]** If the leap second is negative (59 seconds in the minute):
 - Shift all record times AFTER the leap second forward one second.
 - Set activity flag bit 5 to 1 in the header of the record containing the leap second.
-- Change ‘end_sync_instrument’ to be one second later than what the instrument
+- Change `end_sync_instrument` to be one second later than what the instrument
   indicated
-
-Here is how to do this using msmod, assuming a positive leap-second at 23:59:60 on day
-182, 2016:
-
-```console
-msmod --timeshift -1 -ts 2016,182,23:59:59.999999' msmod –actflags ‘4,1’ –ts 2016,182,23:59:36 –te 2016,183,00:00:36
-```
-The times in the second command are hand-chosen to bracket the record containing the leap second.
-
-**THE ABOVE EXAMPLE IS UGLY, CAN WE DO IT WITHOUT HAND-CHOSING TIMES? (SPECIFYING 23:59:59.9999999...)**
 
 
 ## Proposed modifications to existing standards
