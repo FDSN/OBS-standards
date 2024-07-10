@@ -16,7 +16,7 @@ files with embedded OBS-specific information, or they can be used to fill in inf
 in StationXML files generated using other tools.
 
 ## processing steps
-**[REC {/}]** Processing done on data files (from data download to delivery to the data center)
+**[REC {6/6}]** Processing done on data files (from data download to delivery to the data center)
 should be recorded in text-based, structured files.
 The JSON process-steps format (LINK) is an example.
 
@@ -34,7 +34,7 @@ DG   | Differential pressure gauge
 DO   | "Absolute” bottom pressure recorder
 
 ## Station names for repeated deployments
-**[REC {/}]** If OBSs are deployed repeatedly at one site (to make a long series), use an
+**[REC {6/6}]** If OBSs are deployed repeatedly at one site (to make a long series), use an
 incrementing alphanumeric character at the end of the station name (i.e., A01A,
 then A01B then A01C for subsequent deployments at the same approximate location).
 This may be a *de facto* "standard", but I haven't seen it written down
@@ -45,7 +45,7 @@ See StationXML Reference for details of StationXML elements
 
 ### Clock drift
 
-**[REC {/}]** Should be specified using absolute datetimes, to avoid ambiguity.  Possible structures are:
+**[REC {6/6}]** Should be specified using absolute datetimes, to avoid ambiguity.  Possible structures are:
 
 ```yaml
 time_base: 'Seascan MCXO, 1e-8 nominal drift'
@@ -98,7 +98,7 @@ correction_end_sync_instrument: subtracted one second from displayed instrument 
 
 only `time` and `type` are required
 
-**[REC {/}]** Embedded in a StationXML `<Comment>`.  Possible future namespace element, as for clock drift.  Below is a StationXML example
+**[REC {6/6}]** Embedded in a StationXML `<Comment>`.  Possible future namespace element, as for clock drift.  Below is a StationXML example
 
 ```xml
 <Comment subject=”Leap Second”>
@@ -108,13 +108,13 @@ only `time` and `type` are required
 ```
 
 ### Deployments in lakes
-**[STD {/}]** Set the `<WaterLevel>` to the elevation of the lake surface
+**[STD {6/6}]** Set the `<WaterLevel>` to the elevation of the lake surface
 
 ### Positions
-**[REC {/}]** Use the `plusError`, `minusError` and `measurementUncertainty` attributes to specify uncertainties in Latitude, Longitude and Elevation and how you measured them.
+**[REC {6/6}]** Use the `plusError`, `minusError` and `measurementMethod` attributes to specify uncertainties in Latitude, Longitude and Elevation and how you measured them.
 
 ### Orientation information
-**[STD {/}]** Set the following `<Azimuth>` and `<Dip>` values for the following source/subsource codes:
+**[STD {6/6}]** Set the following `<Azimuth>` and `<Dip>` values for the following source/subsource codes:
 
 code       | `<Dip unit="DEGREES>xxx</Dip>`[^1] | `<Azimuth unit="DEGREES" xxx>` | `yyy</Azimuth>`   | Comment
 ---------- | ------------------------------ | ----------------------------- | ---------------- | ---------------------------
@@ -128,7 +128,7 @@ DH, DG, DO | -90.0                   |                                      | 0.
 [^2]: The pressure sensor dip gives the same polarity as the seismometer/geophone for UPGOING waves.  Dip = -90 means that the first break will have the same polarity as a "Z" channel
 
 ### Data completeness
-**[REC {/}]** Use Station ``<StartDate>`` and ``<EndDate>`` to specify when the data was supposed to start and end, and Channel ``<StartDate>`` and ``<EndDate>`` to specify when it actually starts and ends for each channel.
+**[REC {6/6}]** Use Station ``<StartDate>`` and ``<EndDate>`` to specify when the data was supposed to start and end, and Channel ``<StartDate>`` and ``<EndDate>`` to specify when it actually starts and ends for each channel.  **Need to discuss what should be used for startdate and enddate**
 
 ### Standard values that marine seismologists may not know:
 **[FDSN]** Within each `<Channel>`, set `<Type>CONTINUOUS</Type>` and `<Type>GEOPHYSICAL</Type>`
@@ -141,7 +141,7 @@ DH, DG, DO | -90.0                   |                                      | 0.
 Three main possibilities for distributing data are proposed:
 1. *"RAW"*: No time correction applied.
     - May be preferred by users of long-period data (>10s) because it can be easier to concatenate daily files.
-3. **[HIGHLY RECOMMENDED {/}]** *"SHIFTED"*: Indicate the time correction in each record header and apply it.
+3. **[HIGHLY RECOMMENDED {6/6}]** *"SHIFTED"*: Indicate the time correction in each record header and apply it.
     - Allows the user to work with time-corrected but otherwise unmodified data
 5. *"RESAMPLED"*: Resample the data at the originally intended rate.
     - "Best of both worlds": data are time-corrected and easy to concatenate/combine with other data
@@ -150,13 +150,13 @@ Three main possibilities for distributing data are proposed:
 #### Distinguishing data of each type
 
 - *SHIFTED**
-    - **[RECOMMENDED {/}]** data quality flag "Q"
-    - **[ALTERNATIVE {/}]** location code between 00 and 49
-    - **[ALTERNATIVE {/}]** letter in location code?
+    - **[RECOMMENDED {6/6}]** data quality flag "Q"
+    - **[ALTERNATIVE {2/6}]** location code between 00 and 49
+    - **[ALTERNATIVE {1/6}]** letter in location code? (for miniSEED3?)
 - *RAW*
-    - **[RECOMMENDED {/}]** data quality flag "D"
-    - **[ALTERNATIVE {/}]** location code between 50 and 99
-    - **[ALTERNATIVE {/}]** letter in location code?
+    - **[RECOMMENDED {6/6}]** data quality flag "D"
+    - **[ALTERNATIVE {2/6}]** location code between 50 and 99
+    - **[ALTERNATIVE {1/6}]** letter in location code?
 - *RESAMPLED*
     - Different channel code (to be specified)
 
@@ -164,10 +164,10 @@ Three main possibilities for distributing data are proposed:
 
 - *RAW*
     - Nothing to do.
-    - [RECOMMENDED? {/}] Put time correction in record header field 16 and set field 12 bit 1 to 0.
+    - [RECOMMENDED? {5/6}] Put time correction in record header field 16 and set field 12 bit 1 to 0.
 - *SHIFTED**
-    - **[REC {/}]** Calculate a new time drift for each record
-    - **[STD {/}]** Indicate time correction applied in record header field 16 (“Time
+    - **[REC {6/6}]** Calculate a new time drift for each record
+    - **[STD {6/6}]** Indicate time correction applied in record header field 16 (“Time
       Correction” and set field 12, bit 1 (“Activity flag, time correction applied”) to 1.
     - If there is no measure of clock drift:
        - Provide data as "D". set bit 7 of data quality flag ("time tag is questionable") to 1.  Add blockette 500, field 10 ("Clock status") indicating that there is an unmeasured drift (for example: "Unmeasured clock drift on Seascan MCXO, expected order = 1e-8")
@@ -177,9 +177,9 @@ Three main possibilities for distributing data are proposed:
 There is a new ``msmod`` option in discussion/development that should take care of creating *SHIFTED** data, using either a linear or cubic spline interpolation (possibility of polynomial fit?).
 
 ### Leap seconds
-**[STD {/}]** Leap seconds should be corrected in **SHIFTED** data and the record containing the leap second should be flagged.
+**[STD {6/6}]** Leap seconds should be corrected in **SHIFTED** data and the record containing the leap second should be flagged.
 
-**[STD {/}]** If the leap second is positive (the most common case: 61 seconds in the minute):
+**[STD {6/6}]** If the leap second is positive (the most common case: 61 seconds in the minute):
 - Shift all record times AFTER the leap second back one second.
 - Set activity flag bit 4 to 1 in the header of the record containing the leap second.
 - Change `end_sync_instrument` to be one second earlier than what the instrument
@@ -193,7 +193,7 @@ msmod --timeshift -1 -ts 2016,182,23:59:59.999999'
 msmod –-actflags ‘4,1’ –tsc 2016,182,23:59:59.999999 –tec 2016,182,23:59:59.999999
 ```
 
-**[STD {/}]** If the leap second is negative (59 seconds in the minute):
+**[STD {6/6}]** If the leap second is negative (59 seconds in the minute):
 - Shift all record times AFTER the leap second forward one second.
 - Set activity flag bit 5 to 1 in the header of the record containing the leap second.
 - Change `end_sync_instrument` to be one second later than what the instrument
