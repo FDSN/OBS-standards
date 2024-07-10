@@ -133,11 +133,14 @@ code       | `<Dip unit="DEGREES>xxx</Dip>`[^1] | `<Azimuth unit="DEGREES" xxx>`
 ---------- | ------------------------------ | ----------------------------- | ---------------- | ---------------------------
 1          | 0.0                     | minusError="180.0" plusError="180.0" | 0.0  |
 2          | 0.0                     | minusError="180.0" plusError="180.0" | 90.0 |
-3          | 90.0                    |                                      | 0.0  |
+3          | 90.0                    |                                      | 0.0  |  For positive voltage for DOWNWARD motion
+N          | 0.0                     |                                      | 0.0  |  Azimuth must be within 5° OF 0°
+E          | 0.0                     |                                      | 90.0 |  Aziumth must be within 5° OF 90°
+Z          | -90.0                   |                                      | 0.0  |  Dip must be within 5° of -90
 DH, DG, DO | 90.0                    |                                      | 0.0  | if value *DECREASES* for a pressure increase[^2]
 DH, DG, DO | -90.0                   |                                      | 0.0  | if value *INCREASES* for a pressure increase[^2]
 
-[^1]: StationXML/Seed Dip is degrees down from horizontal.  SAC analog is +90 degrees ([`CMPINC` : Component incident angle (degrees from upward vertical)](https://ds.iris.edu/files/sac-manual/manual/file_format.html)
+[^1]: StationXML/Seed Dip is degrees down from horizontal.  SAC "CMPINC" is StationXML Dip+90 degrees ([Component incident angle (degrees from upward vertical)](https://ds.iris.edu/files/sac-manual/manual/file_format.html)
 [^2]: The pressure sensor dip gives the same polarity as the seismometer/geophone for UPGOING waves.  Dip = -90 means that the first break will have the same polarity as a "Z" channel
 
 ### Data completeness
@@ -163,11 +166,11 @@ Three main possibilities for distributing data are proposed:
 #### Distinguishing data of each type
 
 - *SHIFTED**
-    - **[RECOMMENDED {6/6}]** data quality flag "Q"
+    - **[REC {6/6}]** data quality flag "Q"
     - **[ALTERNATIVE {2/6}]** location code between 00 and 49
     - **[ALTERNATIVE {1/6}]** letter in location code? (for miniSEED3?)
 - *RAW*
-    - **[RECOMMENDED {6/6}]** data quality flag "D"
+    - **[REC {6/6}]** data quality flag "D"
     - **[ALTERNATIVE {2/6}]** location code between 50 and 99
     - **[ALTERNATIVE {1/6}]** letter in location code?
 - *RESAMPLED*
@@ -176,8 +179,9 @@ Three main possibilities for distributing data are proposed:
 #### Creating data of each type
 
 - *RAW*
-    - Nothing to do.
-    - [RECOMMENDED? {5/6}] Put time correction in record header field 16 and set field 12 bit 1 to 0.
+    - **[REC {/}] Do nothing to headers.
+    - **[REC {5/6}]** Put time correction in record header field 16 and set field 12 bit 1 to 0.
+    - **[REC {/}]** Do not correct leap seconds (too complicated processing for "Raw" data]
 - *SHIFTED**
     - **[REC {6/6}]** Calculate a new time drift for each record
     - **[STD {6/6}]** Indicate time correction applied in record header field 16 (“Time
@@ -187,7 +191,7 @@ Three main possibilities for distributing data are proposed:
 - *RESAMPLED*
     - Not yet determined
 
-There is a new ``msmod`` option in discussion/development that should take care of creating *SHIFTED** data, using either a linear or cubic spline interpolation (possibility of polynomial fit?).
+There is a new ``msmod`` option in development that should take care of creating *SHIFTED** data, using either a linear or cubic spline interpolation.
 
 ### Leap seconds
 **[STD {6/6}]** Leap seconds should be corrected in **SHIFTED** data and the record containing the leap second should be flagged.
