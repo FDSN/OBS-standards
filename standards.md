@@ -34,7 +34,7 @@ DG   | Differential pressure gauge
 DO   | "Absolute” bottom pressure recorder
 
 ## Station names for repeated deployments
-**[REC {6/6}]** If OBSs are deployed repeatedly at one site (to make a long series), use an
+**[REC {6/6}]** If OBSs are deployed repeatedly at one site (to make a long series), they can use the same station name if the deployments are known to be within XX km of one another (**REF**).  If not, one should use an
 incrementing alphanumeric character at the end of the station name (i.e., A01A,
 then A01B then A01C for subsequent deployments at the same approximate location).
 This may be a *de facto* "standard", but I haven't seen it written down
@@ -45,40 +45,40 @@ See StationXML Reference for details of StationXML elements
 
 ### Clock drift
 
-**[REC {6/6}]** Should be specified using absolute datetimes, to avoid ambiguity.  Possible structures are:
+**[REC {6/6}]** Should be specified using UTC datetimes, to avoid ambiguity.  The datetimes should be in ISO8601 format, followed by a "Z" to unambigously specify UTC.  The structure is:
 
 ```yaml
-time_base: 'Seascan MCXO, 1e-8 nominal drift'
-reference: 'GPS'
-start_sync_reference: '2015-04-22T09:21:00Z'
-start_sync_instrument: '2015-04-22T09:21:00Z'
-end_sync_reference: '2016-05-28T22:59:00.1843Z'
-end_sync_instrument: '2016-05-28T22:59:02Z'
+drift:
+    type: 'piecewise'
+    interpolation: 'linear'  # 'linear' or 'cubic'
+    time_base: 'Seascan MCXO, 1e-8 nominal drift'
+    reference: 'GPS'
+    syncs_reference_instrument:
+        - ["2016-09-10T00:00:00Z", "2016-09-10T00:00:00Z"]  
+        - ["2017-01-12T00:00:00.415Z", "2017-01-12T00:00:01Z"]  
+        - ["2017-07-13T11:25:00.6189Z", "2017-07-13T11:25:01Z"] 
 ```
+the `time_base`, `reference` and `type` fields are optional (`piecewise` is the default (and only) type).
+In the simplest case of a synchronization at the beginning and end of an experiment, and assuming purely
+linear drift, the above example would only have two lines for `syncs_reference_instruments`
 
-the `time_base` and `reference` fields are optional.
-
-or, for more flexibility :
-
-```yaml
-interpolation: 'linear'  # 'linear' or 'cubic'
-syncs_reference:
-    - '2015-04-22T09:21:00Z'
-    - '2016-05-28T22:59:00.1843Z'
-syncs_instrument:
-    - '2015-04-22T09:21:00Z'
-    - '2016-05-28T22:59:02Z'
-```
-
-This is embedded in the StationXML file as a JSON-coded string in a `<Comment>` field
+**[REC {/}]** Embed this information in the StationXML file as a JSON-coded string in a `<Comment>` field
+with `subjet="Clock Correction"`.
 In the future, a seperate namespace may be created to allow a more specific and structured representation
 
-Below is an example of the first proposition in a `<Comment>` field:
+Below is an example of the above structure in a `<Comment>` field (with whitespaces added for clarity):
 
 ```xml
-<Comment subject=”Clock Drift”>
-<Value>“{Linear Clock Correction: {time_base: Seascan MCXO, 1e-8 nominal
-drift, reference: GPS, start_sync_reference: 2015-04- 22T09:21:00Z,start_sync_instrument: 0, end_sync_reference: 2016-05- 28T22:59:00.1843Z,end_sync_instrument: 2016-05-28T22:59:02Z}}”</Value> </Comment>
+<Comment subject=”Clock Correction”>
+<Value>“{drift: {time_base: Seascan MCXO, 1e-8 nominal drift,
+                 reference: GPS,
+                 type: piecewise,
+                 interpolation: linear,
+                 syncs_reference_instrument: [['2016-09-10T00:00:00Z', '2016-09-10T00:00:00Z'],
+                                              ['2017-01-12T00:00:00.415Z', '2017-01-12T00:00:01Z'],
+                                              ['2017-07-13T11:25:00.6189Z', '2017-07-13T11:25:01Z']
+                }
+         }”</Value> </Comment>
 ```
 
 If there is assumed to be clock drift but some or all of values were not measured, each missing value should be represented by 'None'
@@ -87,23 +87,36 @@ If there is assumed to be clock drift but some or all of values were not measure
 
 Structure is:
 ```yaml
-time: 2016-082T23:59:60Z
-type: +
-description: Positive leap-second (a 61-second minute)
-correction_data:
-    - msmod --timeshift -1 -ts 2016,182,23:59:59.999999
-    - msmod --actflags ‘4,1’ –tsc 2016,182,23:59:59.999999 –tec 2016,182,23:59:59.999999
-correction_end_sync_instrument: subtracted one second from displayed instrument time
+leapseconds:
+    values:
+        - list_file_string: "3692217600      37      # 1 Jan 2017"
+          type: '+'
+    corrected_in_basic_miniseed: false
+    corrected_in_syncs_instrument: true
 ```
 
-only `time` and `type` are required
+`values` is an array/list, to allow for more than one leap-second during a deployment.
 
-**[REC {6/6}]** Embedded in a StationXML `<Comment>`.  Possible future namespace element, as for clock drift.  Below is a StationXML example
+`list_file_string` should be directly copied from `leap-seconds.list`, which is available online at several sites, including https://data.iana.org/time-zones/tzdb/leap-seconds.list.  The user should verify that the "File expires on" date is later than the last instrument channel's end-date.
+
+`type` indicates whether the second number in the list_file_string is greater than the previous line's value ("+") or less than the previous line's value ("-").  As of June 2024, all leap seconds have been type "+"
+
+`corrected_in_basic_miniseed` indicates whether the "raw" miniSEED data (if any) correctly integrates the leap second.  For most OBS deployments, this value should be `false` as dataloggers without GPS don't (yet?) have a way to integrate leap seconds.
+
+`corrected_in_syncs_instrument`: indicates whether the instrument sync times have been corrected for the leap second(s).  They should generally be, but in some cases (many sync times and/or more than  one leap second) this may be best left to an algorithm that inputs these values than to a human operator. 
+
+
+**[REC {6/6}]** Embed this information in the StationXML file as a JSON-coded string in a `<Comment>` field
+with `subjet="Clock Correction"`.
+In the future, a seperate namespace may be created to allow a more specific and structured representation
+
+Below is an example of the above structure in a `<Comment>` field (with whitespaces added for clarity):
 
 ```xml
-<Comment subject=”Leap Second”>
-<Value>“{time: 2016-082T23:59:60Z, type: '+', description: 'Positive leap-second (a
-61-second minute)', correction_data: ['msmod --timeshift -1 -ts 2016,182,23:59:59.999999', ' msmod –actflags ‘4,1’ –ts 2016,182,23:59:36 –te 2016,183,00:00:36'], correction_end_sync_instrument: subtracted one second from displayed instrument time"</Value>
+<Comment subject=”Clock Correction”>
+<Value>“{leapseconds: {values: [[list_file_string: '3692217600      37      # 1 Jan 2017,' type: '+']],   
+                       corrected_in_syncs_instrument: true,
+                       corrected_in_basic_miniseed: true}"</Value>
 </Comment>
 ```
 
