@@ -1,6 +1,6 @@
 # OBS-standards
 
-Definintion of marine seismology data and metadata standards, and possibly creation of documents for users
+Definition of marine seismology data and metadata standards, and possibly creation of documents for users
 
 The goals are to:
 - define standards (and propose new ones if needed)
