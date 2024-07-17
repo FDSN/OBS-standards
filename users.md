@@ -21,6 +21,7 @@ The [Metadata and Data](./users.md#metadata-and-data) section contains subsectio
 ## OBS-specific Software
 There are several publically available software modules that can be useful for confirming or correcting data and metadata. If you calculate better clock drift or sensor
 orientation values than those provided in the data center,  inform the data center of the new values and the method you used to calculate them.
+It would be best if all of these codes worked on the same data/metadata formats (for example, SeisComp Data Structure and StationXML)
 
 ### Descriptions
 
@@ -46,15 +47,15 @@ A program to input continuous data-center-level data and a shot file (in some st
 
 ### Available software
 
-Subject      |  Site            | Comments
------------- | ---------------- | ---------------
-Clock drift  |                  | sara hable's code
-Sensor orientation |            | John Scholz's code
-"                  |    ppol    | Wayne's ppol code
-"                  | http://www.obsip.org/data/obs-horizontal-orientation/ | Stachnik et al. code  
-Noise removal      |   ATACR    | matlab version
-"                  |   ATACR    | python version
-"                  |  tiskitpy  |
-BRUIT-FM Toolbox   | https://gitlab.ifremer.fr/anr-bruitfm/bruit-fm-toolbox | Improved windowing selection and data stacking for more accurate transfer function calculation
-Station localization | obsloc?  |
-Active seismic data  |          |
+Subject      |  Software name   | Site /package    | Comments
+------------ | ---------------- | --------------- | ------------
+Clock drift  |                  |                 | sara hable's code?
+Sensor orientation |    ppol    |                 | Wayne's ppol code (based on John Scholz, plus event location uncertainty)
+"                  |            | http://www.obsip.org/data/obs-horizontal-orientation/ | Stachnik et al. code  
+Noise removal      |   ATACR    | https://github.com/helenjanisz/ATaCR | matlab version
+"                  |   ATACR    | https://nfsi-canada.github.io/OBStools/atacr.html | python version
+"                  |  tiskitpy  | https://tiskitpy.readthedocs.io/latest/ | Wayne Crawford
+"                  | BRUIT-FM Toolbox   | https://gitlab.ifremer.fr/anr-bruitfm/bruit-fm-toolbox | Improved windowing selection and data stacking for more accurate transfer function calculation. Integrate into tiskitpy?
+"                  | Compy      |   | Mohammad-Amin Aminians' code.  Integrate into tiskitpy?
+Station localization | OBSrange  | https://github.com/jbrussell/OBSrange | matlab tool
+Conversion to active seismic data format  |  toSEGY        |  | Does not exist, should be fairly simple using obspy
