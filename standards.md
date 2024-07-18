@@ -114,7 +114,7 @@ Below is an example of the above structure in a `<Comment>` field (with whitespa
 
 ```xml
 <Comment subject=”Clock Correction”>
-<Value>“{leapseconds: {values: [[list_file_string: '3692217600      37      # 1 Jan 2017,' type: '+']],   
+<Value>“{leapseconds: {values: [{list_file_string: '3692217600      37      # 1 Jan 2017,' type: '+'}],   
                        corrected_in_syncs_instrument: true,
                        corrected_in_basic_miniseed: true}"</Value>
 </Comment>
