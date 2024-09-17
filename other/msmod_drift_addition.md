@@ -2,7 +2,7 @@
 
 # Project for clock correction in msmod
 
-We would like to add piecewise-linear clock correction as an option to `msmod`.  Data providers could use this to correct instrument times with a known drift, as is the case for ocean-bottom seismometers where the instrument-reference offset is measured before and after deployment.
+We would like to add clock correction as an option to `msmod`.  Data providers could use this to correct instrument times with a known drift, as is the case for ocean-bottom seismometers where the instrument-reference offset is measured before and after deployment.
 
 ## Command line addition
 
@@ -14,7 +14,7 @@ We would like to add piecewise-linear clock correction as an option to `msmod`. 
 ## File format
 
 - Comment/header lines, starting with '#'
-- Interpolation type ('linear' or 'cubic')
+- Correction type ('piecewise_linear' or 'cubic_spline')
 - Timing lines.
     -  At least two
     -  Two columns of libmseed-readable times, ending in 'Z'
@@ -23,7 +23,7 @@ We would like to add piecewise-linear clock correction as an option to `msmod`. 
 Example:
 
 ```
-interpolation: cubic
+type: cubic_spline
 # Reference time         Instrument time
 2023-01-01T10:01:00Z     2023-01-01T10:01:00.001Z
 2023-02-01T00:00:00Z     2023-02-01T00:00:00.012Z
@@ -80,3 +80,6 @@ To correct, assuming no drift after the last segment, append:
   In principal, we should always have an instrumen time, but not necessarily a reference time
   (in the case of no synchronization): it might be prettier/clearer to have
   instrument time in the first column
+- Should we allow the second column to be a number of seconds to add to the datetime in the first column (for example '+0.0' for
+  the initial synchronization).  This would allow a more compact notation and could avoid some errors when using the same value
+  for both reference and instrument, but it could allow +/- ambiguity
