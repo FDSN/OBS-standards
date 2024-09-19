@@ -49,16 +49,16 @@ See StationXML Reference for details of StationXML elements
 
 ```yaml
 drift:
-    type: 'piecewise'
-    interpolation: 'linear'  # 'linear' or 'cubic'
-    time_base: 'Seascan MCXO, 1e-8 nominal drift'
+    type: 'piecewise_linear' # 'piecewise_linear', 'cubic_spline' or 'polynomial {a0 a1 a2 ...}'
+    time_base: 'Seascan MCXO'
+    nomimal_drift_rate: 1e-8
     reference: 'GPS'
     syncs_reference_instrument:
         - ["2016-09-10T00:00:00Z", "2016-09-10T00:00:00Z"]  
         - ["2017-01-12T00:00:00.415Z", "2017-01-12T00:00:01Z"]  
         - ["2017-07-13T11:25:00.6189Z", "2017-07-13T11:25:01Z"] 
 ```
-the `time_base`, `reference` and `type` fields are optional (`piecewise` is the default (and only) type).
+the `time_base`, `nominal_drift_rate` and `reference` fields are optional.
 In the simplest case of a synchronization at the beginning and end of an experiment, and assuming purely
 linear drift, the above example would only have two lines for `syncs_reference_instruments`
 
@@ -70,10 +70,10 @@ Below is an example of the above structure in a `<Comment>` field (with whitespa
 
 ```xml
 <Comment subject=”Clock Correction”>
-<Value>“{drift: {time_base: Seascan MCXO, 1e-8 nominal drift,
+<Value>“{drift: {time_base: Seascan MCXO,
+                 nominal_drift_rate: 1e-8,
                  reference: GPS,
-                 type: piecewise,
-                 interpolation: linear,
+                 type: piecewise_linear,
                  syncs_reference_instrument: [['2016-09-10T00:00:00Z', '2016-09-10T00:00:00Z'],
                                               ['2017-01-12T00:00:00.415Z', '2017-01-12T00:00:01Z'],
                                               ['2017-07-13T11:25:00.6189Z', '2017-07-13T11:25:01Z']
