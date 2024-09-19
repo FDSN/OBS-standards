@@ -25,7 +25,7 @@ There must be at least 2 time lines: there is no upper limit.
 The times in each column must be monotonically increasing and the range
 of {instrument_time}s must cover the time range in the input miniSEED file.
 Time format is yyyy-mm-ddTHH:MM:SS(.FFFFF)Z
-The comment line (starting with '#' in column 1) is optional and has no effect on processing
+The comment line (starting with '#') is optional and has no effect on processing
 Other comment lines, starting with '#' are allowed
 Possible {keyword} {parameters} are:
    piecewise_linear (no parameters): linear interpolation between each time line
