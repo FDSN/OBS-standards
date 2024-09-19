@@ -74,10 +74,8 @@ corrected_time = instrument_time + CubicSpline(reference_times-instrument_times,
 (using SciPy's CubicSpline algorithm, find equivalent in your language)
 
 ### polynomial algorithm
-corrected_time = instrument_time + CubicSpline(reference_times-instrument_times,
-                                               instrument_times-instrument_times[0],
-					       bc_type='natural')(dT)
-(using SciPy's CubicSpline algorithm, find equivalent in your language)
+corrected_time = instrument_time + a0 + a1*dT + a2*dT^2 + a3*dT^3...
+
 
 ## Warnings:
 
