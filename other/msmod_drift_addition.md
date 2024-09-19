@@ -2,25 +2,42 @@
 
 # Project for clock correction in msmod
 
-We would like to add clock correction as an option to `msmod`.  Data providers could use this to correct instrument times with a known drift, as is the case for ocean-bottom seismometers where the instrument-reference offset is measured before and after deployment.
+We would like to add clock correction as an `msmod` option.  Data providers could use this to correct instrument times with a known drift, as is the case for ocean-bottom seismometers where the instrument-reference offset is measured before and after deployment.
 
-## Command line addition
+## Command line  help
+
+with `-h`
 
 ```
---cc FILENAME      # Piecewise clock correction. 
-                   # Columns are: reference time, instrument time
+--cc CCFILENAME      # Clock correction parameters.  Type '-H' for details
+```
+
+with `-H`, same as above plus, at the end of the help:
+```
+The clock correction file format is (no need to indent:
+  type: {keyword} {parameters}
+  {reference_time_0} {instrument_time_0}
+  {reference_time_1} {instrument_time_1}
+  ...
+
+There must be at least 2 time lines: there is no upper limit.
+The times in each column must be monotonically increasing and the range
+of {instrument_time}s must cover the time range in the input miniSEED file.
+Time format is yyyy-mm-ddTHH:MM:SS(.FFFFF)Z
+Comment lines are preceded by a '#', it is good practice to include
+the following comment line above the first time line:
+  # Reference times       Instrument times
+Possible {keyword} {parameters} are:
+   piecewise_linear (no parameters): linear interpolation between each time line
+   cubic_spline (no parameters): cubic spline interpolation between each time line
+   polynomial a0 a1 a2 a3...: corrected_time = instrument_time + a0 + a1*dT + a2*dT^2 + ...
+                              where dTime = instrument_time - instrument_time_0
+                              and time line values are used to validate corrected_times
+An output named {CCFILENAME}.log contains
+
 ```
   
-## File format
-
-- Comment/header lines, starting with '#'
-- Correction type ('piecewise_linear' or 'cubic_spline')
-- Timing lines.
-    -  At least two
-    -  Two columns of libmseed-readable times, ending in 'Z'
-	-  Each column must be monotonically increasing.
-
-Example:
+## File format example
 
 ```
 type: cubic_spline
@@ -34,23 +51,52 @@ type: cubic_spline
 ## Algorithm
 
 - Verify that all data times are included in the "Instrument time" bounds
+- Verify that each time column is monotonically increasing
+- If polynomial correction, verify that it produces the indicated "reference_times"
+  when applied to the corresponding "instrument_times"
 - For each record in the input file
-	- Calculate the time correction neeeded, by linear interpolation between the surrounding "Instrument time" lines
+	- Calculate the time correction neeeded, by the selected method
 	- Apply this to the Record Start Time field
 	- Put this value in the Time Correction field
 	- Set Activity Flag "Time Correction Applied" Bit
 
-## Errors:
+### piecewise_linear algorithm
+corrected_time = instrument_time + dT*(reference_time[n+1]-reference_times[n])/(instrument_times[n+1]-instrument_times[n])
 
+where dT = (instrument_time - instrument_times[n])
+where n is chosen such that instrument_times[n]<=instrument_time <= instrument_times[n+1].
+This leaves an ambiguity at instrument_time = instrument_times[k], choose n=k if k=0, n=k-1 otherwise
+
+### cubic spline algorithm
+corrected_time = instrument_time + CubicSpline(reference_times-instrument_times,
+                                               instrument_times-instrument_times[0],
+					       bc_type='natural')(dT)
+(using SciPy's CubicSpline algorithm, find equivalent in your language)
+
+### polynomial algorithm
+corrected_time = instrument_time + CubicSpline(reference_times-instrument_times,
+                                               instrument_times-instrument_times[0],
+					       bc_type='natural')(dT)
+(using SciPy's CubicSpline algorithm, find equivalent in your language)
+
+## Warnings:
+
+No  | Problem                         | Action
+--- | ------------------------------- | --------------------------------
+1   | A More than 0.5-sample change in the offset between two records | WARNING with record number and time information
+
+## Errors:
 
 No  | Problem                         | Action
 --- | ------------------------------- | --------------------------------
 1   | Badly formatted input file      | ERROR with first bad line #
 2a  | Non-increasing reference times  | ERROR with first bad line #
 2b  | Non-increasing instrument times | ERROR with first bad line #
-3a  | Data starts before first instrument time | ERROR with suggested modifcations
+3a  | Data starts before first instrument time | ERROR with suggested modifications
 3b  | Data ends after last instrument time | ERROR with suggested modifications
 4   | Time Correction or Time Correction Applied Field already set in data | ERROR with first record # (or time)
+5   | Log file exists                 | ERROR with "log file {name} exists"
+6   | Polynomial output does not match a time line | ERROR with suggested message
 
 Flagging part "a" does not prevent checking part "b"
 
@@ -75,11 +121,20 @@ To correct, assuming no drift after the last segment, append:
    2023-04-02T13:12:00Z     2023-04-02T13:12:01.234Z
 ```
 
-## QUESTIONS
-- Should the order be reference, then instrument (current case) or vice versa?
-  In principal, we should always have an instrumen time, but not necessarily a reference time
-  (in the case of no synchronization): it might be prettier/clearer to have
-  instrument time in the first column
-- Should we allow the second column to be a number of seconds to add to the datetime in the first column (for example '+0.0' for
-  the initial synchronization).  This would allow a more compact notation and could avoid some errors when using the same value
-  for both reference and instrument, but it could allow +/- ambiguity
+#### Error 6:
+
+```
+Polynomial does not generate reference corrected times:
+REFERENCE_TIME |  INSTRUMENT_TIME | CORRECTED_TIME  | ERROR (s)
+-------------- | ---------------- | --------------- | -------------
+yyyy-mm-ddTHH:MM:SS.FFFF | yyyy-mm-ddTHH:MM:SS.FFFF | yyyy-mm-ddTHH:MM:SS.FFFF | X.XXXX
+```
+
+# TEST FILES
+We have provided:
+- a miniSEED file, with one sample per second from 2022-01-01 to
+2023-01-01
+- 3 clock correction files, one for each type
+- 3 "log" files.
+
+`msmod infile -cc {CLOCK_CORRECTION_FILE}` should produce the same log files (and implicit miniseed file) as the provided log files.
