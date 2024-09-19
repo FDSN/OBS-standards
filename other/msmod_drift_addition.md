@@ -14,8 +14,9 @@ with `-h`
 
 with `-H`, same as above plus, at the end of the help:
 ```
-The clock correction file format is (no need to indent:
+The clock correction file format is (do not indent):
   type: {keyword} {parameters}
+  # Reference Time   Instrument Time
   {reference_time_0} {instrument_time_0}
   {reference_time_1} {instrument_time_1}
   ...
@@ -24,9 +25,8 @@ There must be at least 2 time lines: there is no upper limit.
 The times in each column must be monotonically increasing and the range
 of {instrument_time}s must cover the time range in the input miniSEED file.
 Time format is yyyy-mm-ddTHH:MM:SS(.FFFFF)Z
-Comment lines are preceded by a '#', it is good practice to include
-the following comment line above the first time line:
-  # Reference times       Instrument times
+The comment line (starting with '#' in column 1) is optional and has no effect on processing
+Other comment lines, starting with '#' are allowed
 Possible {keyword} {parameters} are:
    piecewise_linear (no parameters): linear interpolation between each time line
    cubic_spline (no parameters): cubic spline interpolation between each time line
