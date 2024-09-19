@@ -101,7 +101,7 @@ leapseconds:
 
 `type` indicates whether the second number in the list_file_string is greater than the previous line's value ("+") or less than the previous line's value ("-").  As of June 2024, all leap seconds have been type "+"
 
-`corrected_in_basic_miniseed` indicates whether the "raw" miniSEED data (if any) correctly integrates the leap second.  For most OBS deployments, this value should be `false` as dataloggers without GPS don't (yet?) have a way to integrate leap seconds.
+`corrected_in_basic_miniseed` indicates whether the "NOT CLOCK CORRECTED" miniSEED data (if any) correctly integrates the leap second.  For most OBS deployments, this value should be `false` as dataloggers without GPS don't (yet?) have a way to integrate leap seconds.
 
 `corrected_in_syncs_instrument`: indicates whether the instrument sync times have been corrected for the leap second(s).  They should generally be, but in some cases (many sync times and/or more than  one leap second) this may be best left to an algorithm that inputs these values than to a human operator. 
 
@@ -155,9 +155,9 @@ DH, DG, DO | -90.0                   |                                      | 0.
 ### Clock drift correction
 
 Three main possibilities for distributing data are proposed:
-1. *"RAW"*: No time correction applied.
+1. *"NOT CLOCK CORRECTED"*: No time correction applied.
     - May be preferred by users of long-period data (>10s) because it can be easier to concatenate daily files.
-3. **[HIGHLY RECOMMENDED {6/6}]** *"SHIFTED"*: Indicate the time correction in each record header and apply it.
+3. **[HIGHLY RECOMMENDED {6/6}]** *"CLOCK CORRECTED"*: Indicate the time correction in each record header and apply it.
     - Allows the user to work with time-corrected but otherwise unmodified data
 5. *"RESAMPLED"*: Resample the data at the originally intended rate.
     - "Best of both worlds": data are time-corrected and easy to concatenate/combine with other data
@@ -165,11 +165,11 @@ Three main possibilities for distributing data are proposed:
 
 #### Distinguishing data of each type
 
-- *SHIFTED**
+- *CLOCK CORRECTED**
     - **[REC {6/6}]** data quality flag "Q"
     - **[ALTERNATIVE {2/6}]** location code between 00 and 49
     - **[ALTERNATIVE {1/6}]** letter in location code? (for miniSEED3?)
-- *RAW*
+- *NOT CLOCK CORRECTED*
     - **[REC {6/6}]** data quality flag "D"
     - **[ALTERNATIVE {2/6}]** location code between 50 and 99
     - **[ALTERNATIVE {1/6}]** letter in location code?
@@ -178,11 +178,11 @@ Three main possibilities for distributing data are proposed:
 
 #### Creating data of each type
 
-- *RAW*
+- *NOT CLOCK CORRECTED*
     - **[REC {/}] Do nothing to headers.
     - **[REC {5/6}]** Put time correction in record header field 16 and set field 12 bit 1 to 0.
-    - **[REC {/}]** Do not correct leap seconds (too complicated processing for "Raw" data]
-- *SHIFTED**
+    - **[REC {/}]** Do not correct leap seconds (too complicated processing for "NOT CLOCK CORRECTED" data]
+- *CLOCK CORRECTED**
     - **[REC {6/6}]** Calculate a new time drift for each record
     - **[STD {6/6}]** Indicate time correction applied in record header field 16 (“Time
       Correction” and set field 12, bit 1 (“Activity flag, time correction applied”) to 1.
@@ -191,10 +191,10 @@ Three main possibilities for distributing data are proposed:
 - *RESAMPLED*
     - Not yet determined
 
-There is a new ``msmod`` option in development that should take care of creating *SHIFTED** data, using either a linear or cubic spline interpolation.
+There is a new ``msmod`` option in development that should take care of creating *CLOCK CORRECTED** data, using either a linear or cubic spline interpolation.
 
 ### Leap seconds
-**[STD {6/6}]** Leap seconds should be corrected in **SHIFTED** data and the record containing the leap second should be flagged.
+**[STD {6/6}]** Leap seconds should be corrected in **CLOCK CORRECTED** data and the record containing the leap second should be flagged.
 
 **[STD {6/6}]** If the leap second is positive (the most common case: 61 seconds in the minute):
 - Shift all record times AFTER the leap second back one second.
