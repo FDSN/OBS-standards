@@ -33,7 +33,7 @@ It would be best if all of these codes worked on the same data/metadata formats 
 The instrument clock drift (relative to a reference instrument) can be calculated using noise correlation (REF_SITE) or using the observed drift in hypocenter traveltime residuals.
 
 #### Sensor orientation calculation/correction
-Determining the horizontal orientation of the instrument using teleseisms and/or local earthquakes. A common method used is the Rayleigh wave polarization method, outlined in the Stachnik et al., 2012 paper[^1]
+Determining the horizontal orientation of the instrument using teleseisms, local earthquakes and/or active seismic sources. A common method used is the Rayleigh wave polarization method, outlined in the Stachnik et al., 2012 paper[^1]
 with code made available on the OBSIP website.
 
 [^1]: Stachnik, J.C., A.F. Sheehan, D.W. Zietlow, Z. Yang, J. Collins, and A. Ferris (2012), Determination of New Zealand Ocean Bottom Seismometer Orientation via Rayleigh- Wave Polarization: Seismol. Res. Lett., 83, 704–712, doi:10.1785/0220110128.
