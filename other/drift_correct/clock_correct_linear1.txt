@@ -1,0 +1,4 @@
+type: piecewise_linear
+# Reference time         Instrument time
+2022-01-01T00:00:00Z     2022-01-01T00:00:00Z
+2023-01-01T00:00:00Z   2023-01-01T00:00:01.5Z
