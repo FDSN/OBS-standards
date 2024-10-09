@@ -40,20 +40,19 @@ An output file named {CCFILENAME}.log contains information on each record's modi
 ## File format examples
 
 ```
-type: cubic_spline
+type: cubic
 # Reference time         Instrument time
-2023-01-01T10:01:00Z     2023-01-01T10:01:00.001Z
-2023-02-01T00:00:00Z     2023-02-01T00:00:00.012Z
-2023-03-01T00:00:00Z     2023-03-01T00:00:00.503Z
-2023-04-01T13:12:00Z     2023-04-01T13:12:01.234Z
+2022-01-01T00:00:00Z     2022-01-01T00:00:00Z
+2022-06-01T00:00:00Z     2022-06-01T00:00:00.1Z
+2023-01-01T00:00:00Z     2023-01-01T00:00:01.5Z
 ```
 
 ```
-type: polynomial 0.001 1e-8 2.4e-16
+type: polynomial 0.001 3.38e-9 1.4e-15
 # Reference time         Instrument time
-2023-01-01T10:01:00Z     2023-01-01T10:01:00.001Z
-2024-07-01T10:01:00Z     2023-07-01T10:01:00.216Z
-2024-01-01T10:01:00Z     2024-01-01T10:01:00.555Z
+2022-01-01T00:00:00Z     2022-01-01T00:00:00.001Z
+2022-07-01T00:00:00Z     2022-07-01T00:00:00.396Z
+2023-01-01T00:00:00Z     2023-01-01T00:00:01.500Z
 ```
 
 ## Algorithm
@@ -76,9 +75,10 @@ where n is chosen such that instrument_times[n]<=instrument_time <= instrument_t
 This leaves an ambiguity at instrument_time = instrument_times[k], choose n=k if k=0, n=k-1 otherwise
 
 ### cubic spline algorithm
-corrected_time = instrument_time + CubicSpline(reference_times-instrument_times,
-                                               instrument_times-instrument_times[0],
+corrected_time = instrument_time + CubicSpline(instrument_times-instrument_times[0],
+					       reference_times-instrument_times,
 					       bc_type='natural')(dT)
+where dT = (instrument_time - instrument_times[0])
 (using SciPy's CubicSpline algorithm, find equivalent in your language)
 
 ### polynomial algorithm
