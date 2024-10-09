@@ -30,14 +30,14 @@ Other comment lines, starting with '#' are allowed
 Possible {keyword} {parameters} are:
    piecewise_linear (no parameters): linear interpolation between each time line
    cubic_spline (no parameters): cubic spline interpolation between each time line
-   polynomial a0 a1 a2 a3...: corrected_time = instrument_time + a0 + a1*dT + a2*dT^2 + ...
-                              where dTime = instrument_time - instrument_time_0
+   polynomial a0 a1 a2 a3...: instrument_time = reference_time + a0 + a1*dT + a2*dT^2 + ...
+                              where dTime = reference_time - reference_time[0]
                               and time line values are used to validate corrected_times
-An output named {CCFILENAME}.log contains
+An output file named {CCFILENAME}.log contains information on each record's modified parameters
 
 ```
   
-## File format example
+## File format examples
 
 ```
 type: cubic_spline
@@ -48,12 +48,20 @@ type: cubic_spline
 2023-04-01T13:12:00Z     2023-04-01T13:12:01.234Z
 ```
 
+```
+type: polynomial 0.001 1e-8 2.4e-16
+# Reference time         Instrument time
+2023-01-01T10:01:00Z     2023-01-01T10:01:00.001Z
+2024-07-01T10:01:00Z     2023-07-01T10:01:00.216Z
+2024-01-01T10:01:00Z     2024-01-01T10:01:00.555Z
+```
+
 ## Algorithm
 
 - Verify that all data times are included in the "Instrument time" bounds
 - Verify that each time column is monotonically increasing
 - If polynomial correction, verify that it produces the indicated "reference_times"
-  when applied to the corresponding "instrument_times"
+  when applied to the corresponding "instrument_times" (note, the equation is the inverse of that written in the help)
 - For each record in the input file
 	- Calculate the time correction neeeded, by the selected method
 	- Apply this to the Record Start Time field
@@ -74,7 +82,7 @@ corrected_time = instrument_time + CubicSpline(reference_times-instrument_times,
 (using SciPy's CubicSpline algorithm, find equivalent in your language)
 
 ### polynomial algorithm
-corrected_time = instrument_time + a0 + a1*dT + a2*dT^2 + a3*dT^3...
+corrected_time = instrument_time - a0 - a1*dT - a2*dT^2 - a3*dT^3...
 
 
 ## Warnings:
@@ -82,19 +90,20 @@ corrected_time = instrument_time + a0 + a1*dT + a2*dT^2 + a3*dT^3...
 No  | Problem                         | Action
 --- | ------------------------------- | --------------------------------
 1   | A More than 0.5-sample change in the offset between two records | WARNING with record number and time information
+2   | Input file contains records with quality flag != 'D' | WARNING "input file contains non-D data quality flags"
 
 ## Errors:
 
-No  | Problem                         | Action
+No  | Problem                         | Message
 --- | ------------------------------- | --------------------------------
-1   | Badly formatted input file      | ERROR with first bad line #
-2a  | Non-increasing reference times  | ERROR with first bad line #
-2b  | Non-increasing instrument times | ERROR with first bad line #
-3a  | Data starts before first instrument time | ERROR with suggested modifications
-3b  | Data ends after last instrument time | ERROR with suggested modifications
-4   | Time Correction or Time Correction Applied Field already set in data | ERROR with first record # (or time)
-5   | Log file exists                 | ERROR with "log file {name} exists"
-6   | Polynomial output does not match a time line | ERROR with suggested message
+1   | Badly formatted input file      | ERROR: {Problem}: line {#}
+2a  | Non-increasing reference times  | ERROR: {Problem}: line {#}
+2b  | Non-increasing instrument times | ERROR: {Problem}: line {#}
+3a  | Data starts before first instrument time | See below
+3b  | Data ends after last instrument time | See below
+4   | Time Correction or Time Correction Applied Field already set in data | ERROR: {Problem}: Record {#} ({time})
+5   | Log file exists                 | ERROR: {Problem}: {filename}
+6   | Polynomial output does not match a time line | See below
 
 Flagging part "a" does not prevent checking part "b"
 
