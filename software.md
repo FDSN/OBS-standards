@@ -32,14 +32,15 @@ A program to input continuous data-center-level data and a shot file (in some st
 
 Subject      |  Software                          | Comments
 ------------ | ---------------------------------- | ------------
-Modify miniseed  |  qedit                             | linear and piecewise linear time correction, application of leap seconds, header modification
+Modify miniseed  |  [msmod](https://github.com/earthscope/msmod) | Application of leapseconds, header modification
+"             |  [qedit](https://ncedc.org/qug/software/ucb/) | Linear and piecewise linear time correction, application of leap seconds, header modification
 "                |  [GIPP tools](https://git.gfz-potsdam.de/gipp/gipptools) | toolbox, e.g. modify header, cut in pieces, export header to ASCII, etc.
 Clock drift  |                                    | sara hable's code?
 "            | justCorrel (Hanneman 2014)         |
 "            | ObsPy (Bayreuther 2010, Krischer 2015) | 
 "            |  [Integrated Seismic Program](https://projectisp.github.io/ISP_tutorial.github.io/) | 
 "            | Fortran code after Weemstra (2020) |
-Sensor orientation |    ppol                    | Wayne's ppol code (based on John Scholz, plus event location uncertainty)
+Sensor orientation |    [ppol](https://github.com/WayneCrawford/Ppol)  | Based Scholz et al. (2017), plus event location uncertainty
 "                  |    [OBSIP orientation](http://www.obsip.org/data/obs-horizontal-orientation/) | Stachnik et al. code  
 "                  | [OrientPy](https://nfsi-canada.github.io/OrientPy/) |
 Noise removal      |   [ATACR](https://github.com/helenjanisz/ATaCR) | matlab version
@@ -47,5 +48,5 @@ Noise removal      |   [ATACR](https://github.com/helenjanisz/ATaCR) | matlab ve
 "                  |  [tiskitpy](https://tiskitpy.readthedocs.io/latest/) | Wayne Crawford
 "                  | [BRUIT-FM Toolbox](https://gitlab.ifremer.fr/anr-bruitfm/bruit-fm-toolbox) | Improved windowing selection and data stacking for more accurate transfer function calculation. 
 "                  | [Compy]      |   | Mohammad-Amin Aminians' code.  
-Station localization | [OBSrange](https://github.com/jbrussell/OBSrange) | matlab or python
-Conversion to active seismic data format  |  toSEGY        |  | Does not exist, should be fairly simple using obspy
+Station localization | [OBSrange](https://github.com/jbrussell/OBSrange) | matlab and python
+Conversion to active seismic data format  |   | Does not exist, should be fairly simple using obspy
