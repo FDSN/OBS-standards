@@ -5,6 +5,9 @@ It would be best if all of these codes worked on the same data/metadata formats 
 
 ## Descriptions
 
+### Modifying miniseed files
+Few (none?) of these tools are OBS-specific, but they can be used for OBS-specific tasks
+
 ### Creating metadata
 
 [obsinfo](https://obsinfo.readthedocs.io) is a tool for creating StationXML files that include OBS-specific information
@@ -27,15 +30,22 @@ A program to input continuous data-center-level data and a shot file (in some st
 
 ## Available software
 
-Subject      |  Software name   | Site /package    | Comments
------------- | ---------------- | --------------- | ------------
-Clock drift  |                  |                 | sara hable's code?
-Sensor orientation |    ppol    |                 | Wayne's ppol code (based on John Scholz, plus event location uncertainty)
-"                  |            | http://www.obsip.org/data/obs-horizontal-orientation/ | Stachnik et al. code  
-Noise removal      |   ATACR    | https://github.com/helenjanisz/ATaCR | matlab version
-"                  |   ATACR    | https://nfsi-canada.github.io/OBStools/atacr.html | python version
-"                  |  tiskitpy  | https://tiskitpy.readthedocs.io/latest/ | Wayne Crawford
-"                  | BRUIT-FM Toolbox   | https://gitlab.ifremer.fr/anr-bruitfm/bruit-fm-toolbox | Improved windowing selection and data stacking for more accurate transfer function calculation. Integrate into tiskitpy?
-"                  | Compy      |   | Mohammad-Amin Aminians' code.  Integrate into tiskitpy?
-Station localization | OBSrange  | https://github.com/jbrussell/OBSrange | matlab tool
+Subject      |  Software                          | Comments
+------------ | ---------------------------------- | ------------
+Modify miniseed  |  qedit                             | linear and piecewise linear time correction, application of leap seconds, header modification
+"                |  [GIPP tools](https://git.gfz-potsdam.de/gipp/gipptools) | toolbox, e.g. modify header, cut in pieces, export header to ASCII, etc.
+Clock drift  |                                    | sara hable's code?
+"            | justCorrel (Hanneman 2014)         |
+"            | ObsPy (Bayreuther 2010, Krischer 2015) | 
+"            |  [Integrated Seismic Program](https://projectisp.github.io/ISP_tutorial.github.io/) | 
+"            | Fortran code after Weemstra (2020) |
+Sensor orientation |    ppol                    | Wayne's ppol code (based on John Scholz, plus event location uncertainty)
+"                  |    [OBSIP orientation](http://www.obsip.org/data/obs-horizontal-orientation/) | Stachnik et al. code  
+"                  | [OrientPy](https://nfsi-canada.github.io/OrientPy/) |
+Noise removal      |   [ATACR](https://github.com/helenjanisz/ATaCR) | matlab version
+"                  |   [ATACR](https://nfsi-canada.github.io/OBStools/atacr.html) | python version
+"                  |  [tiskitpy](https://tiskitpy.readthedocs.io/latest/) | Wayne Crawford
+"                  | [BRUIT-FM Toolbox](https://gitlab.ifremer.fr/anr-bruitfm/bruit-fm-toolbox) | Improved windowing selection and data stacking for more accurate transfer function calculation. 
+"                  | [Compy]      |   | Mohammad-Amin Aminians' code.  
+Station localization | [OBSrange](https://github.com/jbrussell/OBSrange) | matlab or python
 Conversion to active seismic data format  |  toSEGY        |  | Does not exist, should be fairly simple using obspy
