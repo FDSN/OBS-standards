@@ -91,8 +91,9 @@ leapseconds:
     values:
         - list_file_string: "3692217600      37      # 1 Jan 2017"
           type: '+'
-    corrected_in_basic_miniseed: false
-    corrected_in_syncs_instrument: true
+    corrected_in:
+        not_clock_corrected_miniseed: false
+        syncs_instrument: true
 ```
 
 `values` is an array/list, to allow for more than one leap-second during a deployment.
