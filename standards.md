@@ -91,7 +91,7 @@ leapseconds:
     values:
         - list_file_string: "3692217600      37      # 1 Jan 2017"
           type: '+'
-    corrected_in:
+    applied_corrections:
         not_clock_corrected_miniseed: false
         syncs_instrument: true
 ```
