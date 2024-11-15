@@ -88,9 +88,9 @@ If there is assumed to be clock drift but some or all of values were not measure
 Structure is:
 ```yaml
 leapseconds:
-    values:
-        - list_file_string: "3692217600      37      # 1 Jan 2017"
-          type: '+'
+    list_file_entries:
+        - line_text: "3692217600      37      # 1 Jan 2017"
+          leap_type: '+'
     applied_corrections:
         not_clock_corrected_miniseed: false
         syncs_instrument: true
