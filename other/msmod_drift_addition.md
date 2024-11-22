@@ -13,35 +13,46 @@ with `-h`
 ```
 
 with `-H`, same as above plus, at the end of the help:
+
+The clock correction file format is:
 ```
-The clock correction file format is (do not indent):
-  type: {keyword} {parameters}
-  # Reference Time   Instrument Time
-  {reference_time_0} {instrument_time_0}
-  {reference_time_1} {instrument_time_1}
-  ...
+type: {keyword} {parameters}
+# Instrument Time     Reference Time
+{instrument_time_0}   {reference_time_0}
+{instrument_time_1}   {reference_time_1}
+...
+```
 
 There must be at least 2 time lines: there is no upper limit.
 The times in each column must be monotonically increasing and the range
 of {instrument_time}s must cover the time range in the input miniSEED file.
-Time format is yyyy-mm-ddTHH:MM:SS(.FFFFF)Z
+Time format is ``yyyy-mm-ddTHH:MM:SS(.FFFFF)Z``
 The comment line (starting with '#') is optional and has no effect on processing
 Other comment lines, starting with '#' are allowed
 Possible {keyword} {parameters} are:
-   piecewise_linear (no parameters): linear interpolation between each time line
-   cubic_spline (no parameters): cubic spline interpolation between each time line
-   polynomial a0 a1 a2 a3...: instrument_time = reference_time + a0 + a1*dT + a2*dT^2 + ...
-                              where dTime = reference_time - reference_time[0]
-                              and time line values are used to validate corrected_times
-An output file named {CCFILENAME}.log contains information on each record's modified parameters
 
-```
-  
-## File format examples
+- for linear interpolation between each time line
+  ```
+  type: piecewise_linear
+  ```
+- for cubic spline interpolation between each time line
+  ```
+  type: cubic_spline
+  ```
+- for a polynomial relation (validated against the provided time lines):
+  ```
+  type: polynomial a0 a1 a2 a3...
+  ```
+  where instrument_time = reference_time + a0 + a1*dT + a2*dT^2 + ...
+  and dT = reference_time - reference_time[0]
+
+A file named {CCFILENAME}.log is output, containing information on each record's modified parameters
+
+## Input File examples
 
 ```
 type: cubic
-# Reference time         Instrument time
+# Instrument time        Reference time
 2022-01-01T00:00:00Z     2022-01-01T00:00:00Z
 2022-06-01T00:00:00Z     2022-06-01T00:00:00.1Z
 2023-01-01T00:00:00Z     2023-01-01T00:00:01.5Z
@@ -49,7 +60,7 @@ type: cubic
 
 ```
 type: polynomial 0.001 3.38e-9 1.4e-15
-# Reference time         Instrument time
+# Instrument time        Reference time
 2022-01-01T00:00:00Z     2022-01-01T00:00:00.001Z
 2022-07-01T00:00:00Z     2022-07-01T00:00:00.396Z
 2023-01-01T00:00:00Z     2023-01-01T00:00:01.500Z
@@ -132,9 +143,9 @@ To correct, assuming no drift after the last segment, append:
 
 ```
 Polynomial does not generate reference corrected times:
-REFERENCE_TIME |  INSTRUMENT_TIME | CORRECTED_TIME  | ERROR (s)
--------------- | ---------------- | --------------- | -------------
-yyyy-mm-ddTHH:MM:SS.FFFF | yyyy-mm-ddTHH:MM:SS.FFFF | yyyy-mm-ddTHH:MM:SS.FFFF | X.XXXX
+INSTRUMENT_TIME       |  REFERENCE_TIME           | CORRECTED_TIME           | CORRECTED-REFERENCE (s)
+--------------------- | ------------------------- | ------------------------ | -----------------------
+2022-07-01T00:00:00Z  |  2022-07-01T00:00:00.396Z | 2022-07-01T00:00:00.500Z | 0.104
 ```
 
 # TEST FILES
