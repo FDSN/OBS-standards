@@ -38,7 +38,7 @@ or
 msmod --lsp 3692217600
 ```
 
-The former requires translating the Month-Day in the leapseconds.list file into a julian day.
+The former requires translating the Month-Day in the leapseconds.list file into a day of year.
 The latter eliminates interpretation of the NTP time value, but may allow for more copying error (an error check could be to make sure that it corresponds to the first second of a new month)
 
 # Inserting a negative leapsecond using msmod
