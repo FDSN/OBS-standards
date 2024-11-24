@@ -41,3 +41,10 @@ Central European | +1     |    15-17h    |   16-18h   | **23-01h**
 China            | +8     |    22-00h    | **23-01h** | **06-08h**
 Japan            | +9     |  **23-01h**  | **00-02h** |   07-09h
 **SUFFER HOURS** |        |    **3**     |    **3**   |   **3**
+
+## Hours announcement
+### 31 March to 27 October
+14-16h GMT = 7-9 AM Pacific, 10-12 AM Eastern, 15-17h Western Europe, 16-18h Central Europe, 22-00h China, 23-01h Japan
+### 3 November to 10 March
+14-16h GMT = 6-8 AM Pacific, 9-11 AM Eastern, 14-16h Western Europe, 15-17h Central Europe, 22-00h China, 23-01h Japan
+
