@@ -1,5 +1,8 @@
 type: cubic
-# Reference time         Instrument time
-2022-01-01T00:00:00Z     2022-01-01T00:00:00Z
-2022-06-01T00:00:00Z     2022-06-01T00:00:00.1Z
-2023-01-01T00:00:00Z     2023-01-01T00:00:01.5Z
+# instrument timing base: Seascan SISMTB 4.1E
+# instrument nominal drift rate: 1e-8
+# reference timing base: GNSS
+# Instrument time         Reference time
+2022-01-01T00:00:00Z      2022-01-01T00:00:00Z     
+2022-06-01T00:00:00.1Z    2022-06-01T00:00:00Z     
+2023-01-01T00:00:01.5Z    2023-01-01T00:00:00Z     
