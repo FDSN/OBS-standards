@@ -123,7 +123,7 @@ Use obsinfo ["subnetwork" files](https://obsinfo.readthedocs.io/en/latest/subnet
 to store essential information about OBS deployments.
 
 obsinfo subnetwork files can be used with the ``obsinfo`` software to generate [FDSN StationXML](http://docs.fdsn.org/projects/stationxml/en/latest/index.html)
-files with embedded OBS-specific information, or with other toolw to modify
+files with embedded OBS-specific information, or with other tools to modify
 existing StationXML files.
 
 #### miniSEED data
