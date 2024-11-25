@@ -6,13 +6,19 @@
 
 #### StationXML
 
-The StationXML format (v1.2) has no intrinsic elements for storing OBS-specific
-information.  This information should be stored in a structured metadata file
-with a public-published format.
+##### Clock drift and leapseconds
+
+**[REC {/}]** There is no dedicated field in StationXML.
+Embed this information as JSON-coded strings JSON-coded in Station-level `<Comment>` fields with `subjet="Clock Correction"`.
+In the future, a seperate namespace may be created to allow a more specific and structured representation
+
+The structures are shown below in YAML format first, for clarity, then as StationXML Comments.
 
 ##### Clock drift
 
-**[REC {6/6}]** Should be specified using UTC datetimes, to avoid ambiguity.  The datetimes should be in ISO8601 format, followed by a "Z" to unambigously specify UTC.  The structure is:
+**[REC {6/6}]** Should be specified using UTC datetimes, to avoid ambiguity.  The datetimes should be in ISO8601 format, followed by a "Z" to unambiguously specify UTC.  
+
+###### YAML format:
 
 ```yaml
 drift:
@@ -25,34 +31,31 @@ drift:
         - ["2017-01-12T00:00:01Z", "2017-01-12T00:00:00.415Z"]  
         - ["2017-07-13T11:25:01Z", "2017-07-13T11:25:00.6189Z"] 
 ```
-the `time_base`, `nominal_drift_rate` and `reference` fields are optional.
-In the simplest case of a synchronization at the beginning and end of an experiment, and assuming purely
-linear drift, the above example would only have two items within `syncs_instrument_reference`
 
-**[REC {/}]** Embed this information in the StationXML file as a JSON-coded string in a `<Comment>` field
-with `subjet="Clock Correction"`.
-In the future, a seperate namespace may be created to allow a more specific and structured representation
-
-Below is an example of the above structure in a `<Comment>` field (with whitespaces added for clarity):
+###### StationXML format:
 
 ```xml
-<Comment subject=”Clock Correction”>
-<Value>“{drift: {time_base: Seascan MCXO,
-                 nominal_drift_rate: 1e-8,
-                 reference: GPS,
-                 type: piecewise_linear,
-                 syncs_reference_instrument: [['2016-09-10T00:00:00Z', '2016-09-10T00:00:00Z'],
-                                              ['2017-01-12T00:00:00.415Z', '2017-01-12T00:00:01Z'],
-                                              ['2017-07-13T11:25:00.6189Z', '2017-07-13T11:25:01Z']
-                }
-         }”</Value> </Comment>
+<Comment subject=”Clock Correction”><Value>“{drift: {time_base: Seascan MCXO,
+ nominal_drift_rate: 1e-8, reference: GPS, type: piecewise_linear,
+ syncs_reference_instrument: [['2016-09-10T00:00:00Z', '2016-09-10T00:00:00Z'],
+ ['2017-01-12T00:00:00.415Z', '2017-01-12T00:00:01Z'], ['2017-07-13T11:25:00.6189Z',
+ '2017-07-13T11:25:01Z']]}}”</Value></Comment>
 ```
 
-If there is assumed to be clock drift but some or all of values were not measured, each missing value should be represented by 'None'
+###### Explanation of fields
+
+the `time_base`, `nominal_drift_rate` and `reference` fields are optional.
+In the simplest case of a synchronization at the start and end of an experiment, and assuming purely
+linear drift, there would only be two items within `syncs_instrument_reference`.
+
+If there is assumed to be clock drift but some or all reference values were not measured, each missing value should be represented by ``~`` (None).
 
 ##### Leap seconds
 
-Structure is:
+Specified using information from the `leap-seconds.list` file, which is available online at several sites, including https://data.iana.org/time-zones/tzdb/leap-seconds.list.  The user should verify that the "File expires on" date is later than the last instrument channel's end-date.
+
+###### YAML format:
+
 ```yaml
 leapseconds:
     list_file_entries:
@@ -63,38 +66,26 @@ leapseconds:
         syncs_instrument: true
 ```
 
+###### StationXML format
+
+```xml
+<Comment subject=”Clock Correction”><Value>{list_file_entries: [{
+ line_text: '3692217600      37      # 1 Jan 2017', leap_type: '+'}],
+ applied_corrections: {syncs_instrument: true,
+ not_clock_corrected_miniseed: false}}</Value></Comment>
+```
+
+###### Explanation of fields
+
 - `list_file_entries` is an array/list, to allow for more than one leap-second during a deployment.
 
-    - `line_text` should be directly copied from `leap-seconds.list`, which is available online at several sites, including https://data.iana.org/time-zones/tzdb/leap-seconds.list.  The user should verify that the "File expires on" date is later than the last instrument channel's end-date.
-    - `leap_type` indicates whether the second number in the list_file_string is greater than the previous line's value ("+") or less than the previous line's value ("-").  As of June 2024, all leap seconds have been type "+"
+    - `line_text` should be directly copied from 
+    - `leap_type` indicates whether the 2nd number in the list_file line_text ("37" in the above example) is greater than the previous line's value ("+") or less than the previous line's value ("-").  As of June 2024, all leap seconds have been type "+"
 
 - `applied corrections` indicates if leapsecond corrections were applied to input data/parameters:
 
     - `not_clock_corrected_miniseed` is true if the "NOT CLOCK CORRECTED" miniSEED data integrates the leap second.  For most OBS deployments, this value should be `false` as dataloggers without GPS don't (yet?) have a way to integrate leap seconds.
     - `syncs_instrument`: indicates whether the instrument sync times have been corrected for the leap second(s).  They generally shouldbe, but in some cases (many sync times and/or more than one leap second) this may be better left to an algorithm than to a human operator. 
-
-
-**[REC {6/6}]** Embed this information in the StationXML file as a JSON-coded string in a `<Comment>` field
-with `subjet="Clock Correction"`.
-In the future, a separate namespace may be created to allow a more specific and structured representation
-
-Below is an example of the above structure in a `<Comment>` field (with whitespaces added for clarity):
-
-```xml
-<Comment subject=”Clock Correction”>
-<Value>{list_file_entries: [
-            {
-                line_text: '3692217600      37      # 1 Jan 2017',
-                leap_type: '+'}
-        ],
-        applied_corrections: [
-            {
-                syncs_instrument: true,
-                not_clock_corrected_miniseed: false
-            }
-        ]}</Value>
-</Comment>
-```
 
 ##### Orientation information
 **[STD {6/6}]** Set the following `<Azimuth>` and `<Dip>` values for the following source/subsource codes:
@@ -138,7 +129,7 @@ Three main possibilities for distributing data are proposed:
             - *[ALTERNATIVE {2/6}]* location code between 50 and 99
             - *[ALTERNATIVE {1/6}]* letter in location code?
     - Creating:
-        - **[REC {/}] Do nothing to headers.
+        - **[REC {/}]** Do nothing to headers.
         - **[REC {5/6}]** Put time correction in record header field 16 and set field 12 bit 1 to 0.
         - **[REC {/}]** Do not correct leap seconds (too complicated processing for "NOT CLOCK CORRECTED" data]
 
@@ -161,10 +152,11 @@ Three main possibilities for distributing data are proposed:
        - Not yet specified
 
 If there is no measure of clock drift:
+- miniSEED2:
     - Provide data as "D". set bit 7 of data quality flag ("time tag is questionable") to 1.  
     - Add blockette 500, field 10 ("Clock status") indicating that there is an unmeasured drift (for example: "Unmeasured clock drift on Seascan MCXO, expected order = 1e-8")
 
-A new ``msmod`` option in development that should take care of creating *CLOCK CORRECTED** data, using linear, cubic spline, or polynnomial interpolation.
+A new ``msmod`` option in development should take care of creating *CLOCK CORRECTED* data, using linear, cubic spline, or polynomial interpolation.
 
 ##### Leap seconds
 **[STD {6/6}]** Leap seconds should be corrected in **CLOCK CORRECTED** data and the record containing the leap second should be flagged.
@@ -197,7 +189,7 @@ msmod –-actflags ‘4,1’ –tsc 2016,182,23:59:59.999999 –tec 2016,182,23:
 #### processing steps
 **[REC {6/6}]** Processing done on data files (from data download to delivery to the data center)
 should be recorded in text-based, structured files.
-The JSON process-steps format (LINK) is an example.
+The [JSON process-steps format](https://github.com/WayneCrawford/sdpchainpy?tab=readme-ov-file#process-stepsjson) is an example.
 
 #### Proposed modifications to existing standards
 
