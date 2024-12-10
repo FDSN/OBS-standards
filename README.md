@@ -10,10 +10,12 @@ The goals are to:
 
 We want to have a document or documents ready for validation/vote before the next FDSN meeting (September 2025 Lisbon)
 
-The current structure is
-- one document on standards
-- a second document on useful, publically available software tools
-- a third `preambule.md` document that holds motivation information (was in original documents, not ready to throw it out yet)
-- A "References" directory holding old standards documents
+The contents of this repository are:
+- ``standards.md``: proposed standards
+- ``software.md``L useful, publically available software tools
+- The 2024 AGU poster about the Action Group
+- ``References/``: old standards documents
+- ``Meetings/``: notes from Action Group meetings
+- ``other/``: miscellaneous files/directories
 
-The first two documents are initally based on the information in the "References" directory
+The first two documents were started from the information in the "References" directory
