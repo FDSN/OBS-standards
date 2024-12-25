@@ -37,9 +37,9 @@ drift:
 ```xml
 <Comment subject=”Clock Correction”><Value>“{drift: {time_base: Seascan MCXO,
  nominal_drift_rate: 1e-8, reference: GPS, type: piecewise_linear,
- syncs_reference_instrument: [['2016-09-10T00:00:00Z', '2016-09-10T00:00:00Z'],
- ['2017-01-12T00:00:00.415Z', '2017-01-12T00:00:01Z'], ['2017-07-13T11:25:00.6189Z',
- '2017-07-13T11:25:01Z']]}}”</Value></Comment>
+ syncs_instrument_reference: [['2016-09-10T00:00:00Z', '2016-09-10T00:00:00Z'],
+ ['2017-01-12T00:00:01Z', '2017-01-12T00:00:00.415Z'], ['2017-07-13T11:25:01Z',
+ '2017-07-13T11:25:00.6189Z',]]}}”</Value></Comment>
 ```
 
 ###### Explanation of fields
