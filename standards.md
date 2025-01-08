@@ -23,8 +23,8 @@ The structures are shown below in YAML format first, for clarity, then as Statio
 ```yaml
 drift:
     type: 'piecewise_linear' # 'piecewise_linear', 'cubic_spline' or 'polynomial {a0 a1 a2 ...}'
-    time_base: 'Seascan MCXO'
-    nomimal_drift_rate: 1e-8
+    instrument: 'Seascan MCXO'
+    instrument_nomimal_drift_rate: 1e-8
     reference: 'GPS'
     syncs_instrument_reference:
         - ["2016-09-10T00:00:00Z", "2016-09-10T00:00:00Z"]  
@@ -35,8 +35,8 @@ drift:
 ###### StationXML format:
 
 ```xml
-<Comment subject=”Clock Correction”><Value>“{drift: {time_base: Seascan MCXO,
- nominal_drift_rate: 1e-8, reference: GPS, type: piecewise_linear,
+<Comment subject=”Clock Correction”><Value>“{drift: {instrument: Seascan MCXO,
+ instrument_nominal_drift_rate: 1e-8, reference: GPS, type: piecewise_linear,
  syncs_instrument_reference: [['2016-09-10T00:00:00Z', '2016-09-10T00:00:00Z'],
  ['2017-01-12T00:00:01Z', '2017-01-12T00:00:00.415Z'], ['2017-07-13T11:25:01Z',
  '2017-07-13T11:25:00.6189Z',]]}}”</Value></Comment>
