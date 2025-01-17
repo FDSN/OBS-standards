@@ -51,7 +51,7 @@ A file named {CCFILENAME}.log is output, containing information on each record's
 ## Input File examples
 
 ```
-type: cubic
+type: cubic_spline
 # Instrument time        Reference time
 2022-01-01T00:00:00Z     2022-01-01T00:00:00Z
 2022-06-01T00:00:00Z     2022-06-01T00:00:00.1Z
