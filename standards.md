@@ -1,5 +1,28 @@
 # Marine seismology data/metadata standards
 
+## A general rule for adding marine-specific information to StationXML
+
+Currently implemented for clock corrections
+
+1) Define the sub-elements that need to be specified
+2) Insert into StationXML as a **StationXML-standardized element**
+3) Request the addition of the information into StationXML, through FDSN WGII
+
+A **StationXML-standardized element** is an element that obeys the StationXML schema but contains information that is not specified in the schema.
+Currently, **StationXML-standardized elements** are encoded as StationXML ``<Comment>``s, with the elements written as JSON-encoded text strings, preferably with a marine-specific ``subject``.  For example, if the information concerns "peanuts" and can be expressed as:
+```yaml
+can_size.ml: 200
+num_nuts: 10
+brand_name: "Mr Peanut"
+nut_weights.g: [1.1, 1.1, 2.2, 2.4, 1.8, 1.4, 1.3, 1.2, 3.0, 2.1]
+```
+
+then this would be entered into the StationXML file (at the station or channel level, as appropriate) as:
+
+```xml
+<Comment subject=”peanuts”><Value>“{can_size.ml: 200. num_nuts: 10, brand_name: "Mr Peanut", nut_weights.g: [1.1, 1.1, 2.2, 2.4, 1.8, 1.4, 1.3, 1.2, 3.0, 2.1]}”</Value></Comment>
+```
+
 ## Proposed standards
 
 ### Marine-specific
