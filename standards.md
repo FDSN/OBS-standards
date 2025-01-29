@@ -9,7 +9,7 @@ Currently implemented for clock corrections
 3) Request the addition of the information into StationXML, through FDSN WGII
 
 A **StationXML-standardized element** is an element that obeys the StationXML schema but contains information that is not specified in the schema.
-Currently, **StationXML-standardized elements** are encoded as StationXML ``<Comment>``s, with the elements written as JSON-encoded text strings, preferably with a marine-specific ``subject``.  For example, if the information concerns "peanuts" and can be expressed as:
+Currently, **StationXML-standardized elements** are encoded as StationXML ``<Comment>``s, with the elements written as JSON-formatted strings, preferably with a marine-specific ``subject``.  For example, if the information concerns "peanuts" and can be expressed as:
 ```yaml
 can_size.ml: 200
 num_nuts: 10
@@ -128,8 +128,22 @@ DH, DG, DO | -90.0                   |                                      | 0.
 [^2]: The pressure sensor dip gives the same polarity as the seismometer/geophone for UPGOING waves.  Dip = -90 means that the first break will have the same polarity as a "Z" channel
 
 ##### Data completeness
-**[REC {6/6}]** Use Station ``<StartDate>`` and ``<EndDate>`` to specify when the data was supposed to start and end, and Channel ``<StartDate>`` and ``<EndDate>`` to specify when it actually starts and ends for each channel.  **Need to discuss what should be used for startdate and enddate**
+**[REC {6/6}]** Use Station ``<StartDate>`` and ``<EndDate>`` to specify when the data was supposed to start and end, and Channel ``<StartDate>`` and ``<EndDate>`` to specify when it actually starts and ends for each channel.
 
+We recommend keeping all of the recorded data, including "noisy" or "bad".
+
+
+##### Leveling system
+The instrument's leveling system can affect the quality and absolute values of measureables.  The following elements should be specified:
+```yaml
+threshold.deg: (float) # deviation from vertical (degrees) which will trigger releveling
+accuracy.deg:  (float) # maximum deviation from vertical accepted after relevel
+max_relevel_interval.h (float) # longest interval between level checks during the deployment
+n_relevels: (int) # number of relevels performed during the deployment
+relevels: (list) # list of [date, level_before.deg, level_after.deg] for each relevel
+```
+
+Implement as an "Equipment" element at the appropriate (Station or Channel) level, with ``<Type>Leveler</Type>`` and ``<Description>`` a JSON-encoded string of the above elements.
 
 #### subnetwork files
 
