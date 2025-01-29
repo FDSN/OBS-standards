@@ -1,13 +1,15 @@
 # Marine seismology data/metadata standards
 
-## Nomenclature
+## Introduction
+
+### Nomenclature
 
 This document contains FDSN standards, proposed standards, and recommentations.
 Proposed standards are preceded by "We propose".
 Recommendations are preceded by "We recommend".
 FDSN standards are stated.
 
-## A general rule for adding marine-specific information to StationXML
+### A general rule for adding marine-specific information to StationXML
 
 We propose the following rule:
 
