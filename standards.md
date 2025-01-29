@@ -1,8 +1,15 @@
 # Marine seismology data/metadata standards
 
+## Nomenclature
+
+This document contains FDSN standards, proposed standards, and recommentations.
+Proposed standards are preceded by "We propose".
+Recommendations are preceded by "We recommend".
+FDSN standards are stated.
+
 ## A general rule for adding marine-specific information to StationXML
 
-Currently implemented for clock corrections
+We propose the following rule:
 
 1) Define the sub-elements that need to be specified
 2) Insert into StationXML as a **StationXML-standardized element**
@@ -23,7 +30,7 @@ then this would be entered into the StationXML file (at the station or channel l
 <Comment subject=”peanuts”><Value>“{can_size.ml: 200. num_nuts: 10, brand_name: "Mr Peanut", nut_weights.g: [1.1, 1.1, 2.2, 2.4, 1.8, 1.4, 1.3, 1.2, 3.0, 2.1]}”</Value></Comment>
 ```
 
-## Proposed standards
+## Proposed standards and recommentations
 
 ### Marine-specific
 
@@ -39,7 +46,7 @@ The structures are shown below in YAML format first, for clarity, then as Statio
 
 ##### Clock drift
 
-**[REC {6/6}]** Should be specified using UTC datetimes, to avoid ambiguity.  The datetimes should be in ISO8601 format, followed by a "Z" to unambiguously specify UTC.  
+We recommend specifying clock drifts using UTC datetimes, to avoid ambiguity.  The datetimes should be in ISO8601 format, followed by a "Z" to unambiguously specify UTC.  
 
 ###### YAML format:
 
@@ -111,7 +118,7 @@ leapseconds:
     - `syncs_instrument`: indicates whether the instrument sync times have been corrected for the leap second(s).  They generally shouldbe, but in some cases (many sync times and/or more than one leap second) this may be better left to an algorithm than to a human operator. 
 
 ##### Orientation information
-**[STD {6/6}]** Set the following `<Azimuth>` and `<Dip>` values for the following source/subsource codes:
+Set the following `<Azimuth>` and `<Dip>` values for the following source/subsource codes:
 
 code       | `<Dip unit="DEGREES>xxx</Dip>`[^1] | `<Azimuth unit="DEGREES" xxx>` | `yyy</Azimuth>`   | Comment
 ---------- | ------------------------------ | ----------------------------- | ---------------- | ---------------------------
@@ -128,7 +135,7 @@ DH, DG, DO | -90.0                   |                                      | 0.
 [^2]: The pressure sensor dip gives the same polarity as the seismometer/geophone for UPGOING waves.  Dip = -90 means that the first break will have the same polarity as a "Z" channel
 
 ##### Data completeness
-**[REC {6/6}]** Use Station ``<StartDate>`` and ``<EndDate>`` to specify when the data was supposed to start and end, and Channel ``<StartDate>`` and ``<EndDate>`` to specify when it actually starts and ends for each channel.
+We recommend using Station ``<StartDate>`` and ``<EndDate>`` to specify when the data was supposed to start and end, and Channel ``<StartDate>`` and ``<EndDate>`` to specify when it actually starts and ends for each channel.
 
 We recommend keeping all of the recorded data, including "noisy" or "bad".
 
@@ -143,11 +150,13 @@ n_relevels: (int) # number of relevels performed during the deployment
 relevels: (list) # list of [date, level_before.deg, level_after.deg] for each relevel
 ```
 
-Implement as an "Equipment" element at the appropriate (Station or Channel) level, with ``<Type>Leveler</Type>`` and ``<Description>`` a JSON-encoded string of the above elements.
+We propose implementing this as an "Equipment" element at the appropriate (Station or Channel) level, with ``<Type>Leveler</Type>`` and ``<Description>`` a JSON-encoded string of the above elements.
+
+We will request a specific ``Leveler`` implementation of the ``Equipment`` element, with the above elements added to it.
 
 #### subnetwork files
 
-Use obsinfo ["subnetwork" files](https://obsinfo.readthedocs.io/en/latest/subnetwork.html),
+We recommend using obsinfo ["subnetwork" files](https://obsinfo.readthedocs.io/en/latest/subnetwork.html),
 to store essential information about OBS deployments.
 
 obsinfo subnetwork files can be used with the ``obsinfo`` software to generate [FDSN StationXML](http://docs.fdsn.org/projects/stationxml/en/latest/index.html)
@@ -158,47 +167,42 @@ existing StationXML files.
 
 ##### Clock drift correction
 
-Three main possibilities for distributing data are proposed:
+There are three main possibilities for distributing data are proposed:
 1. *"NOT CLOCK CORRECTED"*: No time correction applied.
     - May be preferred by users of long-period data (>10s) because it can be easier to concatenate daily files.
-    - Indicating:
-        - **[REC {6/6}]** miniSEED2: data quality flag "D"
-            - *[ALTERNATIVE {2/6}]* location code between 50 and 99
-            - *[ALTERNATIVE {1/6}]* letter in location code?
-    - Creating:
-        - **[REC {/}]** Do nothing to headers.
-        - **[REC {5/6}]** Put time correction in record header field 16 and set field 12 bit 1 to 0.
-        - **[REC {/}]** Do not correct leap seconds (too complicated processing for "NOT CLOCK CORRECTED" data]
+    - We recommend for Indicating:
+        - miniSEED2: data quality flag "D"
+    - We recommend for Creating:
+        - Put time correction in record header field 16 and set field 12 bit 1 to 0.
 
-2. **[HIGHLY RECOMMENDED {6/6}]** *"CLOCK CORRECTED"*: Indicate the time correction in each record header and apply it.
+2. *"CLOCK CORRECTED"*: Indicate the time correction in each record header and apply it.
     - Allows the user to work with time-corrected but otherwise unmodified data
-    - Indicating:
-        - **[REC {6/6}]** miniSEED 2: data quality flag "Q"
-            - *[ALTERNATIVE {2/6}]* location code between 00 and 49
-            - *[ALTERNATIVE {1/6}]* letter in location code? (for miniSEED3?)
-    - Creating:
-        - **[REC {6/6}]** Calculate a new time drift for each record
-        - **[STD {6/6}]** Indicate time correction applied in record header field 16 (“Time Correction” and set field 12, bit 1 (“Activity flag, time correction applied”) to 1.
+    - We recommend for Indicating:
+        - miniSEED 2: data quality flag "Q"
+    - We recommend for Creating:
+        - Calculate a new time drift for each record
+        - miniSEED2: Indicate time correction applied in record header field 16 (“Time Correction” and set field 12, bit 1 (“Activity flag, time correction applied”) to 1.
 
 3. *"RESAMPLED"*: Resample the data at the originally intended rate.
     - "Best of both worlds": data are time-corrected and easy to concatenate/combine with other data
         - Could distort waveforms/spectra (needs to be studied)
-    - Indicated by:
+    - We recommend for Indicating:
         - miniSEED 2/3: Define another channel code (modified data)
-    - Creating
-       - Not yet specified
+    - We have no recommendations for creating
 
-If there is no measure of clock drift:
+We highly recommend providing the _"CLOCK CORRECTED"_ data, if possible.
+
+Recommendations if there is no measure of clock drift:
 - miniSEED2:
     - Provide data as "D". set bit 7 of data quality flag ("time tag is questionable") to 1.  
     - Add blockette 500, field 10 ("Clock status") indicating that there is an unmeasured drift (for example: "Unmeasured clock drift on Seascan MCXO, expected order = 1e-8")
 
-A new ``msmod`` option in development should take care of creating *CLOCK CORRECTED* data, using linear, cubic spline, or polynomial interpolation.
+A new version of ``msmod``, in development, should be able to create *CLOCK CORRECTED* data from *NOT CLOCK CORRECTED data*, using piecewise linear, cubic spline, or polynomial interpolation.
 
 ##### Leap seconds
-**[STD {6/6}]** Leap seconds should be corrected in **CLOCK CORRECTED** data and the record containing the leap second should be flagged.
+Leap seconds should be corrected in **CLOCK CORRECTED** data and the record containing the leap second should be flagged.
 
-**[STD {6/6}]** If the leap second is positive (the most common case: 61 seconds in the minute):
+If the leap second is positive (the most common case: 61 seconds in the minute):
 - Shift all record times AFTER the leap second back one second.
 - Set activity flag bit 4 to 1 in the header of the record containing the leap second.
 - Change `end_sync_instrument` to be one second earlier than what the instrument
@@ -214,7 +218,7 @@ msmod –-actflags ‘4,1’ –tsc 2016,182,23:59:59.999999 –tec 2016,182,23:
 
 *A new ``msmod`` option has been proposed to simplify this to one line and one time specification.*
 
-**[STD {6/6}]** If the leap second is negative (59 seconds in the minute):
+If the leap second is negative (59 seconds in the minute):
 - Shift all record times AFTER the leap second forward one second.
 - Set activity flag bit 5 to 1 in the header of the record containing the leap second.
 - Change `end_sync_instrument` to be one second later than what the instrument
@@ -224,7 +228,7 @@ msmod –-actflags ‘4,1’ –tsc 2016,182,23:59:59.999999 –tec 2016,182,23:
 ### Marine and maybe general, too
 
 #### processing steps
-**[REC {6/6}]** Processing done on data files (from data download to delivery to the data center)
+We recommend that processing done on data files (from data download to delivery to the data center)
 should be recorded in text-based, structured files.
 The [JSON process-steps format](https://github.com/WayneCrawford/sdpchainpy?tab=readme-ov-file#process-stepsjson) is an example.
 
@@ -236,22 +240,6 @@ The [JSON process-steps format](https://github.com/WayneCrawford/sdpchainpy?tab=
 
 This is the only way to accurately represent OBS clock rates, which are regular but off of the specified sampling rate by a factor of approximately 1e-8 (MCXOs) or 1e-9.5 (CSACs), requiring 27- or 32-bit floating-point mantissas, respectively, to be correctly specified. Single precision floats only have 23-bit mantissas, double precision floats have 52-bit mantissas.
 
-##### More data quality flags, with clear hierarchy
-
-###### In miniSEED2
-
-**REMOVE BELOW, FOCUS ON MINISEED3?**
-d
-Data quality flags are the only clear way to distinguish between levels of data processing, but the choices are too limited. Additional data qualities that cannot currently be specified are: Data directly translated from another format , or data for which the header values have been changed, but not the data itself. A possible hierarchy would be (new in italics):
-- “D” : The state of quality control of the data is Indeterminate
-- “T”: Translated Raw Waveform Data from another initial format
-- “R”: Raw Waveform Data with no Quality Control (reserved for SEEDlink)
-- “H”: Quality controlled Data, processes have been applied only to the headers
-- “Q”: Quality controlled Data, some processes have been applied to the data
-  (does this mean time-series values)?
-- “C”: Quality controlled Data, No processes applied to time-series or header
-- “M”: Data center modified, time-series values have not been changed
-
 ###### In miniSEED3
 In the miniSEED3 header, the Data publication version replaces the data quality flags
 (can still have flags in “Extra Header Fields” (field 14). This offers a clear hierarchy,
@@ -259,11 +247,10 @@ but not a way to specify that one wants uncorrected or corrected data (recommend
 RAW=1 could be used for uncorrected data). Could this be put in field 14: extra
 header fields? In any case, would have to be searchable using web tools
 
-
 ## Reminder/clarification of existing standards
 
 ### Source Identifiers
-**[FDSN]** The following source-subsource codes (see [FDSN Source Identifiers documentation](http://docs.fdsn.org/projects/source-identifiers/en/v1.0/index.html))
+The following source-subsource codes (see [FDSN Source Identifiers documentation](http://docs.fdsn.org/projects/source-identifiers/en/v1.0/index.html))
 should be used for the following types of sensor/data:
 
 code | description
@@ -276,19 +263,18 @@ DG   | Differential pressure gauge
 DO   | "Absolute” bottom pressure recorder
 
 ### Station names for repeated deployments
-**[REC {6/6}]** If OBSs are deployed repeatedly at one site (to make a long series), they can use the same station name if the deployments are known to be within XX km of one another (**REF**).  If not, one should use an
-incrementing alphanumeric character at the end of the station name (i.e., A01A,
-then A01B then A01C for subsequent deployments at the same approximate location).
-This may be a *de facto* "standard", but I haven't seen it written down
+The [IASPEI Station Coding Standard](http://www.isc.ac.uk/registries/download/IR_implementation.pdf) recommends that station and/or location codes be changed if the associated sensors are moved far enought to result in a signifcant *teleseismic* travel-time residual discrepancy.  We recommend the same, except that the basis for what is a significant travel-time residual discrepancy should depend on your study.
+
+If you change the station name between deployments, we recommend incrementing the last _N_ characters of the station name, e.g. ``STAA``, ``STAB``, ``STAC``, or ``STA01``, ``STA02``, ``STA03``, etc.  _N_ should depend on the maximum number of deployments you will possibly make and the characters you use in the incrementer (numeric, alphabetic, or alphanumeric). 
 
 ### Deployments in lakes
-**[STD {6/6}]** Set the `<WaterLevel>` to the elevation of the lake surface
+Set the `<WaterLevel>` to the elevation of the lake surface
 
 ### Positions
-**[REC {6/6}]** Use the `plusError`, `minusError` and `measurementMethod` attributes to specify uncertainties in Latitude, Longitude and Elevation and how you measured them.
+We recommend using the `plusError`, `minusError` and `measurementMethod` attributes to specify uncertainties in Latitude, Longitude and Elevation and how you measured them.
 
 ### Standard values that marine seismologists may not know:
-**[FDSN]** Within each `<Channel>`, set `<Type>CONTINUOUS</Type>` and `<Type>GEOPHYSICAL</Type>`
+Within each `<Channel>`, set `<Type>CONTINUOUS</Type>` and `<Type>GEOPHYSICAL</Type>`
 
 
 
