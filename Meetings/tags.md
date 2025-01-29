@@ -6,6 +6,7 @@
 | 0.3.1 | before 2024-09 meeting       |
 | 0.4.1 | before 2024-11 meeting       |
 | 0.5.1 | before 2025-01 meeting       |
+| 0.6   | after 2025-01 meeting       |
 
 ## To create a tag
 
@@ -13,7 +14,7 @@
 - To the right of the list of files, click **Releases**
 - At the top of the page, click **Draft a new release**
 - Select the **Choose a tag** dropdown menu, type the new version number, and click **Create new tag**
-- Enter a title (e.g. 'Before 2025-01 meeting') and possiblys a description
+- Enter a title (e.g. 'Before 2025-01 meeting') and possibly a description
 - Click **Publish release**
 
 ## To see changes between _tag2_ and _tag1_
