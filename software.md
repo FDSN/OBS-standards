@@ -43,10 +43,11 @@ Clock drift  |                                    | sara hable's code?
 Sensor orientation |    [ppol](https://github.com/WayneCrawford/Ppol)  | Based Scholz et al. (2017), plus event location uncertainty
 "                  |    [OBSIP orientation](http://www.obsip.org/data/obs-horizontal-orientation/) | Stachnik et al. code  
 "                  | [OrientPy](https://nfsi-canada.github.io/OrientPy/) |
-Noise removal      |   [ATACR](https://github.com/helenjanisz/ATaCR) | matlab version
+Noise removal      |   [ATACR](https://github.com/helenjanisz/ATaCR) | Automated Tilt and Compliance Removal, matlab version
 "                  |   [ATACR](https://nfsi-canada.github.io/OBStools/atacr.html) | python version
-"                  |  [tiskitpy](https://tiskitpy.readthedocs.io/latest/) | Wayne Crawford
+"                  |  [tiskitpy](https://tiskitpy.readthedocs.io/latest/) | Transfer-function based and rotation-based, plus synthetic noise generation
 "                  | [BRUIT-FM Toolbox](https://gitlab.ifremer.fr/anr-bruitfm/bruit-fm-toolbox) | Improved windowing selection and data stacking for more accurate transfer function calculation. 
-"                  | [Compy]      |   | Mohammad-Amin Aminians' code.  
+"                  | [Compy](https://github.com/MohammadAmin-Aminian/ComPy) |   tiskitpy + periodic glitch removal and data processing automation
+"                  | [NoiseCut](https://doi.org/10.5281/zenodo.7339552)     | Harmonic-percussive separation algorithms
 Station localization | [OBSrange](https://github.com/jbrussell/OBSrange) | matlab and python
 Conversion to active seismic data format  |   | Does not exist, should be fairly simple using obspy
