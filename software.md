@@ -41,7 +41,7 @@ Clock drift  |                                    | sara hable's code?
 "            |  [Integrated Seismic Program](https://projectisp.github.io/ISP_tutorial.github.io/) | 
 "            | Fortran code after Weemstra (2020) |
 Sensor orientation |    [ppol](https://github.com/WayneCrawford/Ppol)  | Based Scholz et al. (2017), plus event location uncertainty
-"                  |    [OBSIP orientation](http://www.obsip.org/data/obs-horizontal-orientation/) | Stachnik et al. code  
+"                  |    [OBSIP orientation](http://www.obsip.org/data/obs-horizontal-orientation/) | Stachnik et al.[^1] code  
 "                  | [OrientPy](https://nfsi-canada.github.io/OrientPy/) |
 Noise removal      |   [ATACR](https://github.com/helenjanisz/ATaCR) | Automated Tilt and Compliance Removal, matlab version
 "                  |   [ATACR](https://nfsi-canada.github.io/OBStools/atacr.html) | python version
