@@ -10,6 +10,7 @@ the line for the latest leap second, just before 1 January 2017:
 3692217600      37      # 1 Jan 2017
 ```
 This conversion from NTP to UTC can be done using standard UTC libraries, for example:
+
 ```python
 >>> from obspy.core import UTCDateTime
 >>> UTCDateTime(1900,1,1)+3692217600
@@ -17,25 +18,28 @@ UTCDateTime(2017, 1, 1, 0, 0)
 ```
 
 OBS dataloggers do not receive leap-second information during deployment, and most are not built to integrate leap seconds, even if they had prior knowledge.
-Timing from OBS dataloggers covering periods containing leapseconds must therefore be post-processed to include the leap-second [*Note that clock synchronizations made at the end of
-an OBS deployment will be off by as many seconds as there are leap seconds*].
-
+Timing from OBS dataloggers covering periods containing leapseconds must therefore be post-processed to include the leap-second.
 
 # Inserting a positive leapsecond using msmod
 
 Currently, inserting a positive leapsecond into a miniSEED file using `msmod` involves subtracting one second from all records after the record containg the leapsecond, and setting the "positive leapsecond" flag in the record containing the leap second:
+
+
 ```
 msmod --timeshift -1 -ts 2017,01,00,00,00.999999
 msmod –-actflags ‘4,1’ –tsc 2017,001,00,00,00.999999 –tec 2017,001,00,00,00.999999
 ```
 
 It would be simpler and less prone to errors to simply specify a positive leap second at a given date and let msmod take care of the details:
+
 ```
-msmod --lsp 2017,01,00,00,00
+msmod -lsp 2017,001,00,00,00
 ```
+
 or
+
 ```
-msmod --lsp 3692217600
+msmod -lsp 3692217600
 ```
 
 The former requires translating the Month-Day in the leapseconds.list file into a day of year.
@@ -43,21 +47,26 @@ The latter eliminates interpretation of the NTP time value, but may allow for mo
 
 # Inserting a negative leapsecond using msmod
 
-A negative leapsecond could be inserted using
-```
-msmod --lsn 2017,01,00,00,00
-```
-or
-```
-msmod --lsn 3692217600
-```
+Currently,  a negative leapsecond can be inserted into a miniSEED file as follows:
 
-which would replace
 ```
 msmod --timeshift +1 -ts 2016,366,23,59,58.999999
 msmod –-actflags ‘5,1’ –tsc 2016,366,23,59,58.999999 –tec 2016,366,23,59,58.999999
 ```
 
+This could be replaced by:
+
+```
+msmod -lsn 2017,001,00,00,00
+```
+
+or
+
+```
+msmod -lsn 3692217600
+```
+
+
 # Other comments/modifications
-The flags -tsc and -tec were initially implemented to allow one to specify a record containing a time value, specifically for the leap second correction.  If the leap second is handled otherwise,
-these flags might be able to disappear and/or a flag '-ts' could specify the single record containing the given time.
+The flags ``-tsc`` and ``-tec`` were initially added to ``msmod`` to allow one to specify a record containing a time value, specifically for the leap second correction.  If the leap second is handled otherwise,
+these flags might be able to disappear, and/or a flag ``-ts`` could select the single record containing the given time.
