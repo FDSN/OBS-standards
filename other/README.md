@@ -1,5 +1,5 @@
 This directory contains files that do not fit in the other directories.  They are:
-- ``preample.md``: The old preambule to the standards document, specifying why we need to use marine seismomlogy data.
+- ``preamble.md``: The old preambule to the standards document, specifying why we need to use marine seismomlogy data.
   Kept in case we need it in a future document
 - ``msmod_leap_second_addition.md``:  A suggested interface and behavior for msmod with leap second correction.
 - ``msmod_drift_addition.md``: Suggested interface and behavior for msmod with drift correction added.
