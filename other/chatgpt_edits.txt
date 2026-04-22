@@ -1,0 +1,128 @@
+MERMAID Standards PDF — Full Revision Checklist
+
+Blocking issues (must fix before sharing externally)
+
+1. Remove visible edit artifact in §3.2.2 (page 10)
+    There is a struck-through bullet and/or revision residue still visible. Delete all edit remnants so only the final intended recommendation remains. Re-read the entire subsection afterward to ensure it reads as a clean, authoritative statement rather than a draft in transition.
+2. [X] Fix broken IASPEI hyperlink (page 9)
+    The IASPEI Station Coding Standard link currently resolves to about:blank. Replace it with a valid URL and verify the link works in the exported PDF (not just in the source document).
+3. [X] Correct XML example errors and invalid syntax
+    Ensure all XML examples are syntactically valid and internally consistent. Specifically:
+
+* [X] Page 6: Replace Example: <Range>2.0</Range> with <Threshold>2.0</Threshold>.
+* [X] Pages 6–7: Remove spaces inside tag names (e.g., < Accuracy > → <Accuracy>, < MaxRelevelInterval > → <MaxRelevelInterval>, < NumRelevels > → <NumRelevels>).
+* [X] Page 5: Fix malformed equation sentence so it reads clearly, e.g., “time corrections are calculated as: new_time = old_time + …”.
+* [X] Page 5: Fix CubicSpline line punctuation (remove stray quote/colon).
+* [X] Page 10: Verify <NominalDriftRate> value (1e8 vs 1e-8) and make consistent with earlier examples.
+
+4. Fix terminology typo in miniSEED section (page 8)
+    [X] Ensure the header reference reads FSDH (Fixed Section of Data Header) and is used consistently and correctly in context.
+
+⸻
+
+High-priority clarity and correctness improvements
+
+6. [X] Clean up <ClockDrift> example consistency
+    [X] The two <Sync> entries currently reuse the same <Instrument> timestamp while changing the reference time. Either:
+
+* [X] Adjust to a clearer start/end pair, or
+* Add a brief explanatory note clarifying why the instrument time is identical.
+    Right now it looks like a mistake even if it isn’t.
+
+7. [X] Standardize terminology for “leap second”
+    Choose one form and use it consistently throughout:
+
+* [X] “leap second” (recommended)
+    Avoid mixing with “leapsecond” or “leap-second”.
+
+8. Fix minor grammar and punctuation issues
+    Examples to correct:
+
+* “We recommend that, If …” → “We recommend that if …”
+* Ensure consistent capitalization after commas and colons.
+* Normalize quotation marks and punctuation around inline code or XML.
+
+9. Tighten miniSEED guidance language
+    Where referencing FSDH flags or behavior, make wording explicit and unambiguous (e.g., whether guidance applies to miniSEED2 vs miniSEED3, and whether behavior is required vs recommended).
+
+⸻
+
+Structural and presentation improvements
+
+10. Improve title page usability
+    The first page is clean but sparse. Consider adding:
+
+* A one-line scope statement (what the standard covers)
+* Version number (e.g., Draft v0.1)
+* Date
+* Optional repository or working group reference
+
+11. Add document metadata for versioning
+    Include version/date either on the title page or in a footer. This is especially important for a standards document that will evolve.
+12. Improve code/XML formatting consistency
+    Ensure all XML examples:
+
+* Use a consistent monospaced font
+* Have consistent indentation
+* Are visually distinct from body text
+    Right now formatting varies slightly between sections.
+
+13. Normalize bullet and list styles
+    Ensure consistent formatting for:
+
+* Quoted values (e.g., "Polynomial", "CubicSpline")
+* Colon usage after labels
+* Indentation depth across sections
+
+⸻
+
+PDF technical quality and accessibility
+
+14. Enable PDF tagging
+    Export as a tagged PDF so the document is accessible to screen readers and structurally navigable.
+15. Add bookmarks / outline
+    Ensure section headings populate the PDF outline for navigation.
+16. Add metadata
+* Title
+* Author(s)
+* Subject (e.g., MERMAID timing standards)
+17. Optimize PDF output
+    Enable optimization so the file is efficient but still high quality for distribution.
+
+⸻
+
+Content-level strengthening (optional but recommended)
+
+18. Make schema-style elements more formal
+    For proposed elements like <ClockDrift> and <Leveler>, consider tightening into a more explicit spec style:
+
+* Element name
+* Cardinality
+* Units
+* Allowed values
+* Example
+* Notes / edge cases
+    Right now intent is clear, but not fully “spec-grade.”
+
+19. Finalize §3.2.2 policy language
+    After removing edit artifacts, ensure the section clearly answers:
+
+* What should users do when the standard lacks a needed field?
+* What is recommended vs discouraged?
+* Is extensibility encouraged via XML, attributes, or external metadata?
+
+20. Re-check all external references
+    Verify all URLs resolve correctly and are stable. Avoid dead or placeholder links.
+
+⸻
+
+Repo alignment (outside the PDF but important)
+
+21. Ensure a canonical source file exists
+    If standards.pdf is generated from Markdown or LaTeX, include that source in the repo at top level (not just in other/_old/).
+22. Update README.md
+    Make sure it accurately reflects current repo contents (PDF vs Markdown sources).
+23. Establish a build path
+    Document how standards.pdf is generated (e.g., Markdown → Pandoc → PDF), so
+    future edits are reproducible.
+    

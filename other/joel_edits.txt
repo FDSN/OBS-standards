@@ -1,0 +1,30 @@
+<number>: is page number
+
+1: [X] * please update my affil to "Bathymetrix, LLC" 
+
+3: [X] *"standards and their document," --> "standards and their documentation"
+
+4: [X] *"We propose" sentence is missing a period.
+       * "If a component's relative angles..." drop the "s" on "angles"
+
+5: *Re the FDSN stationxml docs: does this have a doi we can cite?
+   *"If no DriftCorrection is specified, ..." would it be more precise to say
+    "If drift correction is empty?" ("empty" seemingly being meaningful in xml docs?)
+   *"ISO8601 format" needs more specificity; format isn't a monolith: include "T", spacers, 2 decimals etc. like in the example?
+     (alt.: we could have appendix or something explaining its use, since we repeat "is08601"
+
+8. [X] *random "--ls" highlighted in yellow
+
+9: *"Set Dip=90. if..." I want to verify we mean, e.g., RAW COUNTS for "recorded value decreases/increases" (thinking about instruments with negative gain...I manage a whole fleet of 'em)
+   [X] *"subnetwork files to store" link doesn't include final "e"
+
+10: [X] *JSON/XML comment: I thought we decided we preferred JSON? [I provided the new option in Issues,
+         have integrated into v20260422 document]
+
+10: *3.2.4 potentially a whole can of worms here...but what about lakes that fill/drain seasonally?
+
+11: *3.4.1 Suggesting data-logger polarity be physically or or post-processed
+switched seems sketchy; what if the ground team does that but then the data are
+uploaded by someone else into the MDA and tagged as XYZ geophone and the
+standard respond package already hosted at EarthScope is incorrectly attached to
+those (polarity reversed) data?
